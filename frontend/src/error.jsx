@@ -8,7 +8,7 @@ class ErrorBoundary extends React.Component {
   static getDerivedStateFromError() {
     return { hasError: true };
   }
-//jk
+//jkopp
   componentDidCatch(error, errorInfo) {
     console.error("Error Boundary Caught Error:", error, errorInfo);
   }
