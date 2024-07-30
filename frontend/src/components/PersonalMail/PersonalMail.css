@@ -1,0 +1,107 @@
+/* Main mail page styling */
+.mail-page {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+  }
+  
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  header h1 {
+    margin: 0;
+  }
+  
+  nav {
+    display: flex;
+  }
+  
+  nav button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  nav button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Mail list styling */
+  .mail-list {
+    margin-top: 20px;
+  }
+  
+  .mail-list h2 {
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+  }
+  
+  .mail-item {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+  }
+  
+  .mail-item h3 {
+    margin: 0;
+    color: #007bff;
+  }
+  
+  .mail-item p {
+    margin: 5px 0;
+  }
+  
+  .mail-item span {
+    font-size: 0.9em;
+    color: #555;
+  }
+  
+  /* Compose mail form styling */
+  .compose-mail {
+    margin-top: 20px;
+  }
+  
+  .compose-mail h2 {
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+  }
+  
+  .compose-mail form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .compose-mail label {
+    margin: 10px 0;
+    font-weight: bold;
+  }
+  
+  .compose-mail input,
+  .compose-mail textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 5px;
+  }
+  
+  .compose-mail button {
+    margin-top: 20px;
+    padding: 10px;
+    cursor: pointer;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .compose-mail button:hover {
+    background-color: #218838;
+  }
+  
