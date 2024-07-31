@@ -16,7 +16,7 @@ const predefinedResponses = {
     "usd to lkr": "To convert USD to LKR, you can use an online currency converter. We don’t offer conversion services.",
     "What features does this app offer?": "The app offers features like choosing T-shirt material, color, and adding custom text and images.",
     "How does this app work?": "Select a T-shirt type, choose a material and color, add your design or text, and then place your order.",
-    //"Is there a mobile app available for this service?": "Currently, there is no mobile app available. The service is accessible through the website.",
+    "Is there a mobile app available for this service?": "Currently, there is no mobile app available. The service is accessible through the website.",
     "Can I choose different types of T-shirt materials?": "Yes, you can choose from materials like cotton, polyester, and blends.",
     "What colors are available for the T-shirts?": "We offer a variety of colors including basic and seasonal shades.",
     "Can I upload my own images for the T-shirt design?": "Yes, you can upload your own images for a custom design.",
