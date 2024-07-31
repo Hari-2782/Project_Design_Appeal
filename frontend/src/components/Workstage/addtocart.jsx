@@ -1,7 +1,29 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-//fine
+import {
+  Box,
+  Button,
+  Checkbox,
+  CircularProgress,
+  Grid,
+  IconButton,
+  Typography,
+  Paper,
+  Divider,
+  TextField,
+  Card,
+  CardContent,
+  CardMedia,
+  Container,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemSecondaryAction,
+  Tooltip,
+} from '@mui/material';
+import { Add, Remove, Delete, ShoppingCart } from '@mui/icons-material';
+//ok
 const AddToCart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -121,61 +143,120 @@ const AddToCart = () => {
   };
 
   return (
-    <div>
-      <h1>Cart</h1>
-      {cartItems.length === 0 ? (
-        <p>No items in cart.</p>
-      ) : (
-        <div>
-          {cartItems.map((item) => {
-            const materialPrice = item.materialPrice > 0 ? item.materialPrice : 50;
+    <Container maxWidth="md">
+      <Box sx={{ py: 4 }}>
+        <Typography variant="h4" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
+          <ShoppingCart sx={{ mr: 2 }} />
+          Your Shopping Cart
+        </Typography>
+        {cartItems.length === 0 ? (
+          <Paper elevation={3} sx={{ p: 3, textAlign: 'center' }}>
+            <Typography variant="body1">Your cart is empty.</Typography>
+            <Button variant="contained" color="primary" sx={{ mt: 2 }} onClick={() => navigate('/')}>
+              Continue Shopping
+            </Button>
+          </Paper>
+        ) : (
+          <Box>
+            <List>
+              {cartItems.map((item) => {
+                const materialPrice = item.materialPrice > 0 ? item.materialPrice : 50;
 
-            return (
-              <div key={item._id} style={{ marginBottom: "20px" }}>
-                <input
-                  type="checkbox"
-                  checked={item.selected}
-                  onChange={() => handleSelect(item._id)}
-                />
-                <img src={item.imageDataURL} alt="Apparel Design" style={{ maxWidth: "10%" }} />
-                
-                <p>Material Price: ${materialPrice}</p>
-                <p>Color Price: ${item.colorPrice}</p>
-                {item.imageDataURL && <p>Image Price: ${item.imagePrice}</p>}
-                {item.text && (
-                  <>
-                    <p>Text Price: ${item.textPrice}</p>
-                    <p>Text: {item.text}</p>
-                  </>
-                )}
-                <p>Apparel: {item.selectedApparel.type}</p>
-                <p>Total Price per Item: ${item.totalPrice}</p>
-                <p>Quantity: 
-                  <button
-                    onClick={() => handleQuantityChange(item._id, item.quantity - 1)}
-                    disabled={item.quantity < 1}
-                  >
-                    -
-                  </button>
-                  {item.quantity}
-                  <button
-                    onClick={() => handleQuantityChange(item._id, (item.quantity + 1))}
-                    disabled={item.quantity >= item.availableQuantity}
-                  >
-                    +
-                  </button>
-                </p>
-                <button onClick={() => handleRemove(item._id)}>Remove</button>
-              </div>
-            );
-          })}
-          <h2>Final Cart Total: ${cartItems.reduce((total, item) => item.selected ? total + (item.totalPrice * item.quantity) : total, 0)}</h2>
-          <button onClick={handleCheckout} disabled={isProcessing}>
-            {isProcessing ? "Processing..." : "Checkout"}
-          </button>
-        </div>
-      )}
-    </div>
+                return (
+                  <Card key={item._id} sx={{ mb: 2 }}>
+                    <CardContent>
+                      <Grid container spacing={2} alignItems="center">
+                        <Grid item>
+                          <Checkbox
+                            checked={item.selected}
+                            onChange={() => handleSelect(item._id)}
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={3}>
+                          <CardMedia
+                            component="img"
+                            image={item.imageDataURL}
+                            alt="Apparel Design"
+                            sx={{ maxWidth: "100%", height: "auto", objectFit: "contain" }}
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                          <Typography variant="h6">{item.selectedApparel.type}</Typography>
+                          <Typography variant="body2" color="text.secondary">Material: {item.materialName}</Typography>
+                          {item.text && (
+                            <Typography variant="body2" color="text.secondary">Text: {item.text}</Typography>
+                          )}
+                          <Box sx={{ mt: 1 }}>
+                            <Grid container spacing={1}>
+                              <Grid item xs={6}>
+                                <Typography variant="body2">Material: ${materialPrice}</Typography>
+                                <Typography variant="body2">Color: ${item.colorPrice}</Typography>
+                              </Grid>
+                              <Grid item xs={6}>
+                                {item.imageDataURL && <Typography variant="body2">Image: ${item.imagePrice}</Typography>}
+                                {item.text && <Typography variant="body2">Text: ${item.textPrice}</Typography>}
+                              </Grid>
+                            </Grid>
+                          </Box>
+                        </Grid>
+                        <Grid item xs={12} sm={3}>
+                          <Typography variant="h6" color="primary">${item.totalPrice}</Typography>
+                          <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
+                            <IconButton
+                              onClick={() => handleQuantityChange(item._id, item.quantity - 1)}
+                              disabled={item.quantity <= 1}
+                              size="small"
+                            >
+                              <Remove fontSize="small" />
+                            </IconButton>
+                            <TextField
+                              value={item.quantity}
+                              variant="outlined"
+                              size="small"
+                              inputProps={{ readOnly: true, style: { textAlign: 'center', width: '40px' } }}
+                            />
+                            <IconButton
+                              onClick={() => handleQuantityChange(item._id, item.quantity + 1)}
+                              disabled={item.quantity >= item.availableQuantity}
+                              size="small"
+                            >
+                              <Add fontSize="small" />
+                            </IconButton>
+                          </Box>
+                        </Grid>
+                      </Grid>
+                    </CardContent>
+                    <ListItemSecondaryAction>
+                      <Tooltip title="Remove">
+                        <IconButton edge="end" onClick={() => handleRemove(item._id)}>
+                          <Delete />
+                        </IconButton>
+                      </Tooltip>
+                    </ListItemSecondaryAction>
+                  </Card>
+                );
+              })}
+            </List>
+            <Divider sx={{ my: 3 }} />
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Typography variant="h5">
+                Total: ${cartItems.reduce((total, item) => item.selected ? total + (item.totalPrice * item.quantity) : total, 0).toFixed(2)}
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                onClick={handleCheckout}
+                disabled={isProcessing}
+                startIcon={isProcessing ? <CircularProgress size={24} /> : <ShoppingCart />}
+              >
+                {isProcessing ? "Processing..." : "Checkout"}
+              </Button>
+            </Box>
+          </Box>
+        )}
+      </Box>
+    </Container>
   );
 };
 
