@@ -13,6 +13,7 @@ import Profile from "./components/Homepage/Profile";
 import Rate from "./components/Rate & Rev/Rate";
 import ErrorBoundary from "./error";
 import AddToCart from "./components/Workstage/addtocart";
+import PaymentFormPage from "./components/Workstage/payment";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/ratings" element={<Rate />} />
           <Route path="/cart" element={<AddToCart/>} />
+          <Route path="/payment" element={<PaymentFormPage/>} />
           <Route
             path="/registration-success"
             element={<RegistrationSuccess />}

@@ -2,13 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const colorToString = (color) => {
-  if (color) {
-    return `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`;
-  }
-  return 'transparent';
-};
-
 const AddToCart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
