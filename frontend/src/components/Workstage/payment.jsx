@@ -14,9 +14,9 @@ const PaymentFormPage = () => {
 
     const formData = {
       merchant_id: '1227808',
-      return_url: 'http://yourdomain.com/return',
-      cancel_url: 'http://yourdomain.com/cancel',
-      notify_url: 'http://yourdomain.com/api/payments/notify',
+      return_url: 'http://localhost:5173',
+      cancel_url: 'http://localhost:5173/cart',
+      notify_url: 'https://sandbox.payhere.lk/merchant/home',
       order_id: orderId,
       items: `Order ${orderId}`,
       currency: 'LKR',
