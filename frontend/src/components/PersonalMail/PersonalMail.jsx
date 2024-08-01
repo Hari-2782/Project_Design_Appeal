@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './PersonalMail.css';
 
 // Mail Item Component
@@ -7,25 +7,36 @@ const MailItem = ({ email }) => {
     <div className="mail-item">
       <h3>{email.subject}</h3>
       <p>{email.body}</p>
-      <span>From: {email.sender}</span>
+      <span>From: {email.from}</span>
     </div>
   );
 };
 
 // Mail List Component
 const MailList = ({ type }) => {
-  // Example data, you would fetch this from an API or database
-  const emails = [
-    { id: 1, subject: 'Hello World', body: 'This is the body of the email.', sender: 'example@example.com' },
-    { id: 2, subject: 'React is Awesome', body: 'This is another email.', sender: 'react@example.com' },
-  ];
+  const [emails, setEmails] = useState([]);
+
+  useEffect(() => {
+    const fetchEmails = async () => {
+      try {
+        const response = await fetch(`/api/emails/${type}`);
+        const data = await response.json();
+        setEmails(data);
+      } catch (error) {
+        console.error('Error fetching emails:', error);
+      }
+    };
+
+    fetchEmails();
+  }, [type]);
 
   return (
     <div className="mail-list">
-      <h2>{type === 'inbox' ? 'Inbox' : 'Sent'}</h2>
-      {emails.map((email) => (
-        <MailItem key={email.id} email={email} />
-      ))}
+      {emails.length === 0 ? (
+        <p>No emails available</p>
+      ) : (
+        emails.map((email, index) => <MailItem key={index} email={email} />)
+      )}
     </div>
   );
 };
@@ -46,10 +57,27 @@ const ComposeMail = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you would handle sending the email, e.g., through an API call
-    console.log('Sending email:', formData);
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send email');
+      }
+
+      alert('Email sent successfully');
+      setFormData({ to: '', subject: '', body: '' }); // Clear form
+    } catch (error) {
+      console.error('Error sending email:', error);
+      alert('Failed to send email');
+    }
   };
 
   return (
@@ -66,7 +94,7 @@ const ComposeMail = () => {
         </label>
         <label>
           Body:
-          <textarea name="body" value={formData.body} onChange={handleChange} required></textarea>
+          <textarea name="body" value={formData.body} onChange={handleChange} required />
         </label>
         <button type="submit">Send</button>
       </form>
@@ -76,7 +104,7 @@ const ComposeMail = () => {
 
 // Main Mail Page Component
 const PersonalMail = () => {
-  const [currentView, setCurrentView] = useState('inbox');
+  const [currentView, setCurrentView] = useState('received');
 
   const handleViewChange = (view) => {
     setCurrentView(view);
@@ -87,13 +115,13 @@ const PersonalMail = () => {
       <header>
         <h1>Personal Mail</h1>
         <nav>
-          <button onClick={() => handleViewChange('inbox')}>Inbox</button>
+          <button onClick={() => handleViewChange('received')}>Inbox</button>
           <button onClick={() => handleViewChange('sent')}>Sent</button>
           <button onClick={() => handleViewChange('compose')}>Compose</button>
         </nav>
       </header>
       <main>
-        {currentView === 'inbox' && <MailList type="inbox" />}
+        {currentView === 'received' && <MailList type="received" />}
         {currentView === 'sent' && <MailList type="sent" />}
         {currentView === 'compose' && <ComposeMail />}
       </main>
