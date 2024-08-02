@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { CircularProgress } from '@mui/material';
 import './PersonalMail.css';
 
 // Mail Item Component
@@ -15,6 +16,7 @@ const MailItem = ({ email }) => {
 // Mail List Component
 const MailList = ({ type }) => {
   const [emails, setEmails] = useState([]);
+  const [loading, setLoading] = useState(true); // Loading state for fetching emails
 
   useEffect(() => {
     const fetchEmails = async () => {
@@ -24,6 +26,8 @@ const MailList = ({ type }) => {
         setEmails(data);
       } catch (error) {
         console.error('Error fetching emails:', error);
+      } finally {
+        setLoading(false); // Stop loading after fetching is done
       }
     };
 
@@ -32,7 +36,12 @@ const MailList = ({ type }) => {
 
   return (
     <div className="mail-list">
-      {emails.length === 0 ? (
+      {loading ? (
+        <div className="loading-screen">
+          <CircularProgress />
+          <p>Loading emails...</p>
+        </div>
+      ) : emails.length === 0 ? (
         <p>No emails available</p>
       ) : (
         emails.map((email, index) => <MailItem key={index} email={email} />)
@@ -48,6 +57,8 @@ const ComposeMail = () => {
     subject: '',
     body: '',
   });
+  const [loading, setLoading] = useState(false); // Loading state for sending email
+  const [emailSent, setEmailSent] = useState(false); // State to show success message
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -59,6 +70,8 @@ const ComposeMail = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Start loading when form is submitted
+
     try {
       const response = await fetch('/api/emails/send', {
         method: 'POST',
@@ -72,32 +85,60 @@ const ComposeMail = () => {
         throw new Error('Failed to send email');
       }
 
-      alert('Email sent successfully');
+      setEmailSent(true); // Show success message
       setFormData({ to: '', subject: '', body: '' }); // Clear form
     } catch (error) {
       console.error('Error sending email:', error);
       alert('Failed to send email');
+    } finally {
+      setLoading(false); // Stop loading after attempt
     }
   };
 
   return (
     <div className="compose-mail">
       <h2>Compose Mail</h2>
-      <form onSubmit={handleSubmit}>
-        <label>
-          To:
-          <input type="email" name="to" value={formData.to} onChange={handleChange} required />
-        </label>
-        <label>
-          Subject:
-          <input type="text" name="subject" value={formData.subject} onChange={handleChange} required />
-        </label>
-        <label>
-          Body:
-          <textarea name="body" value={formData.body} onChange={handleChange} required />
-        </label>
-        <button type="submit">Send</button>
-      </form>
+      {loading ? (
+        <div className="loading-screen">
+          <CircularProgress /> {/* Loading spinner while sending email */}
+          <p>Sending email...</p>
+        </div>
+      ) : emailSent ? (
+        <p>Email sent successfully!</p>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <label>
+            To:
+            <input
+              type="email"
+              name="to"
+              value={formData.to}
+              onChange={handleChange}
+              required
+            />
+          </label>
+          <label>
+            Subject:
+            <input
+              type="text"
+              name="subject"
+              value={formData.subject}
+              onChange={handleChange}
+              required
+            />
+          </label>
+          <label>
+            Body:
+            <textarea
+              name="body"
+              value={formData.body}
+              onChange={handleChange}
+              required
+            />
+          </label>
+          <button type="submit">Send</button>
+        </form>
+      )}
     </div>
   );
 };

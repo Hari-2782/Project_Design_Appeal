@@ -14,6 +14,8 @@ import Rate from "./components/Rate & Rev/Rate";
 import ErrorBoundary from "./error";
 import AddToCart from "./components/Workstage/addtocart";
 import PaymentFormPage from "./components/Workstage/payment";
+import FeedbackForm from "./components/Homepage/FeedbackForm";
+
 
 function App() {
   return (
@@ -31,6 +33,9 @@ function App() {
           <Route path="/ratings" element={<Rate />} />
           <Route path="/cart" element={<AddToCart/>} />
           <Route path="/payment" element={<PaymentFormPage/>} />
+          <Route path="/feedback" element={<FeedbackForm />
+} />
+
           <Route
             path="/registration-success"
             element={<RegistrationSuccess />}
