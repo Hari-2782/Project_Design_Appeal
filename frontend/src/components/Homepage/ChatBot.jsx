@@ -212,7 +212,8 @@ const ChatBot = () => {
                             alignItems: 'center'
                         }}
                     >
-                        <Typography variant="h6" style={{ fontWeight: 'bold' }}>ChatBot</Typography>
+                        <Typography variant="h6" style={{ fontWeight: 'bold' }}>Unique Creations
+                        </Typography>
                         <IconButton onClick={toggleChatBot} style={{ color: 'white' }}>
                             <CloseIcon />
                         </IconButton>
