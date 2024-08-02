@@ -60,7 +60,7 @@ const ComposeMail = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('/api/send-email', {
+      const response = await fetch('/api/emails/send', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
