@@ -166,7 +166,7 @@ const AddToCart = () => {
       };
 
       const hash = generateHash(
-        'MTY0OTg2ODk5MTExMjgwOTcxMDIyMjU0MjkwNTEzNzQzOTA3Nzk1', // Your merchant secret
+        'MzU0NjEzODM5OTE5Mzk3ODAyNDgxMTEwNjA1NTY0OTE3Njk2NzM5', // Your merchant secret
         formData.merchant_id,
         formData.order_id,
         formData.amount,
