@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate ,useLocation } from "react-router-dom";
 import {
   Box,
   Button,
@@ -17,18 +17,34 @@ import {
   CardMedia,
   Container,
   List,
-  ListItem,
-  ListItemText,
   ListItemSecondaryAction,
   Tooltip,
 } from '@mui/material';
 import { Add, Remove, Delete, ShoppingCart } from '@mui/icons-material';
-//ok
+import generateHash from './hashGenerator'; // Ensure this function is available
+
 const AddToCart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [formData, setFormData] = useState({});
   const navigate = useNavigate();
-
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const orderId = queryParams.get('order_id');
+  
+  useEffect(() => {
+    if (orderId) {
+      const handleOrderCompletion = async () => {
+        await Promise.all(
+          cartItems
+            .filter((item) => item.selected)
+            .map((item) => axios.delete(`/api/cart/${item._id}`))
+        );
+        setCartItems(cartItems.filter((item) => !item.selected));
+      };
+      handleOrderCompletion();
+    }
+  }, [orderId, cartItems]);
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
@@ -109,6 +125,7 @@ const AddToCart = () => {
       const selectedItems = cartItems.filter(item => item.selected);
       if (selectedItems.length === 0) {
         alert('No items selected for checkout.');
+        setIsProcessing(false);
         return;
       }
 
@@ -129,15 +146,40 @@ const AddToCart = () => {
         total
       });
 
-      // Clear cart items after successful order placement
-      await Promise.all(selectedItems.map(item => axios.delete(`/api/cart/${item._id}`)));
-      setCartItems(cartItems.filter(item => !item.selected));
-      
-      // Redirect to payment page
-      navigate(`/payment?total=${total}&orderId=${response.data._id}`);
+      // Prepare payment form data
+      const formData = {
+        merchant_id: '1227808',
+        return_url: 'http://localhost:5173/cart',
+        cancel_url: 'http://localhost:5173/cart',
+        notify_url: 'http://localhost:5000/api/payment/webhook',
+        order_id: response.data._id,
+        items: `Order ${response.data._id}`,
+        currency: 'LKR',
+        amount: total,
+        first_name: userInfo.firstName,
+        last_name: userInfo.lastName,
+        email: userInfo.email,
+        phone: userInfo.phone,
+        address: userInfo.address,
+        city: userInfo.city,
+        country: 'Sri Lanka',
+      };
+
+      const hash = generateHash(
+        'MTY0OTg2ODk5MTExMjgwOTcxMDIyMjU0MjkwNTEzNzQzOTA3Nzk1', // Your merchant secret
+        formData.merchant_id,
+        formData.order_id,
+        formData.amount,
+        formData.currency
+      );
+     
+      // Submit the form programmatically
+      setTimeout(() => {
+        document.getElementById("payment-form").submit();
+      }, 1000);
+
     } catch (error) {
       console.error("Error processing order:", error);
-    } finally {
       setIsProcessing(false);
     }
   };
@@ -256,6 +298,14 @@ const AddToCart = () => {
           </Box>
         )}
       </Box>
+
+      {/* Hidden payment form */}
+      <form id="payment-form" method="post" action="https://sandbox.payhere.lk/pay/checkout">
+        {Object.entries(formData).map(([key, value]) => (
+          <input type="hidden" name={key} value={value} key={key} />
+        ))}
+        <input type="submit" value="Buy Now" style={{ display: 'none' }} />
+      </form>
     </Container>
   );
 };
