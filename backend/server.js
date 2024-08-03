@@ -10,6 +10,8 @@ const cartRoutes = require("./routes/Addcart");
 const orderRoutes = require('./routes/orderRoutes');
 const emailRoutes = require('./routes/emailRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
+const feedbackRouter = require('./routes/feedbackRouter'); // Adjust the path as necessary
+
 const { notFound, errorhandler } = require("./middlewares/errorMiddleware");
 const cors = require("cors");
 const bodyParser = require('body-parser');
@@ -32,6 +34,10 @@ app.use("/api/cloudinary", cloudinaryRoutes);
 app.use('/api', orderRoutes);
 app.use('/api/emails', emailRoutes); // Use new routes
 app.use('/api/payment', paymentRoutes);
+app.use('/api/feedback', feedbackRouter);
+
+
+
 // Error handling middleware
 app.use(notFound);
 // app.use(errorhandler);

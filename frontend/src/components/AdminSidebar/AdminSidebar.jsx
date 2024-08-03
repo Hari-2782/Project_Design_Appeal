@@ -119,7 +119,7 @@ const nestedListItems = [
     ],
   },
   { text: "Invoice", icon: <ReceiptIcon />, path: "/admin/invoice" },
-  { text: "Settings", icon: <SettingsIcon />, path: "/admin/settings" },
+  { text: "feedbacks", icon: <SettingsIcon />, path: "/admin/settings" },
 ];
 
 function AdminSidebar(props) {

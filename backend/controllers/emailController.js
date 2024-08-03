@@ -6,7 +6,10 @@ const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'balacinema235@gmail.com',
-        pass: 'cfyf tsva vqfe nfpk',
+        pass: 'cfyf tsva vqfe nfpk', // Use environment variables for better security
+    },
+    tls: {
+        rejectUnauthorized: false, // This allows self-signed certificates
     },
 });
 
@@ -105,14 +108,14 @@ async function fetchSentEmails() {
 }
 
 
-async function sendEmail(req, res) {
+const sendEmail = async (req, res) => {
     const { to, subject, body } = req.body;
 
     const mailOptions = {
         from: 'balacinema235@gmail.com',
         to,
         subject,
-        text: body,
+        text: body, // Use `html` if sending HTML content
     };
 
     try {
@@ -122,7 +125,7 @@ async function sendEmail(req, res) {
         console.error('Error sending email:', error);
         res.status(500).json({ message: 'Error sending email', error: error.message });
     }
-}
+};
 
 module.exports = {
     fetchReceivedEmails,
