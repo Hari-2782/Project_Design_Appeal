@@ -145,10 +145,15 @@ const ItemsBar = ({ onToggleSidebar, onColorChange, onTextChange, onImageUpload 
               <div>
                 <h2>Text Options</h2>
                 <TextField
-                  label="Enter Text"
-                  value={text}
-                  onChange={handleTextChange}
-                />
+      label="Enter Text"
+      value={text}
+      onChange={handleTextChange}
+      InputProps={{
+        style: {
+          backgroundColor: "white",
+        },
+      }}
+    />
               </div>
             )}
             {sidebarView === "Image" && (

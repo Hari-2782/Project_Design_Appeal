@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate ,useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   Box,
   Button,
   Checkbox,
   CircularProgress,
   Grid,
-  IconButton,
   Typography,
   Paper,
   Divider,
@@ -17,8 +16,8 @@ import {
   CardMedia,
   Container,
   List,
-  ListItemSecondaryAction,
   Tooltip,
+  IconButton
 } from '@mui/material';
 import { Add, Remove, Delete, ShoppingCart } from '@mui/icons-material';
 import generateHash from './hashGenerator'; // Ensure this function is available
@@ -31,7 +30,7 @@ const AddToCart = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const orderId = queryParams.get('order_id');
-  
+
   useEffect(() => {
     if (orderId) {
       const handleOrderCompletion = async () => {
@@ -45,6 +44,7 @@ const AddToCart = () => {
       handleOrderCompletion();
     }
   }, [orderId, cartItems]);
+
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
@@ -146,7 +146,6 @@ const AddToCart = () => {
         total
       });
 
-      // Prepare payment form data
       const formData = {
         merchant_id: '1227808',
         return_url: 'http://localhost:5173/cart',
@@ -166,13 +165,15 @@ const AddToCart = () => {
       };
 
       const hash = generateHash(
-        'MzU0NjEzODM5OTE5Mzk3ODAyNDgxMTEwNjA1NTY0OTE3Njk2NzM5', // Your merchant secret
+        'MzU0NjEzODM5OTE5Mzk3ODAyNDgxMTEwNjA1NTY0OTE3Njk2NzM5', 
         formData.merchant_id,
         formData.order_id,
         formData.amount,
         formData.currency
       );
-     
+
+
+
       // Submit the form programmatically
       setTimeout(() => {
         document.getElementById("payment-form").submit();
@@ -214,6 +215,7 @@ const AddToCart = () => {
                             onChange={() => handleSelect(item._id)}
                           />
                         </Grid>
+                      
                         <Grid item xs={12} sm={3}>
                           <CardMedia
                             component="img"
@@ -222,6 +224,7 @@ const AddToCart = () => {
                             sx={{ maxWidth: "100%", height: "auto", objectFit: "contain" }}
                           />
                         </Grid>
+                     
                         <Grid item xs={12} sm={6}>
                           <Typography variant="h6">{item.selectedApparel.type}</Typography>
                           <Typography variant="body2" color="text.secondary">Material: {item.materialName}</Typography>
@@ -241,6 +244,13 @@ const AddToCart = () => {
                             </Grid>
                           </Box>
                         </Grid>
+                        {!isProcessing && (
+                      <Tooltip title="Remove">
+                        <IconButton edge="end" onClick={() => handleRemove(item._id)}>
+                          <Delete />
+                        </IconButton>
+                      </Tooltip>
+                    )}
                         <Grid item xs={12} sm={3}>
                           <Typography variant="h6" color="primary">${item.totalPrice}</Typography>
                           <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
@@ -268,13 +278,7 @@ const AddToCart = () => {
                         </Grid>
                       </Grid>
                     </CardContent>
-                    <ListItemSecondaryAction>
-                      <Tooltip title="Remove">
-                        <IconButton edge="end" onClick={() => handleRemove(item._id)}>
-                          <Delete />
-                        </IconButton>
-                      </Tooltip>
-                    </ListItemSecondaryAction>
+                 
                   </Card>
                 );
               })}
