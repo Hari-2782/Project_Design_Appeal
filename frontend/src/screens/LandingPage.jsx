@@ -10,10 +10,6 @@ import ReviewSection from "../components/Homepage/ReviewSection";
 import ChatBot from "../components/Homepage/ChatBot";
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> d24d98bd053f230900551bee9ed2acdbca7be86e
 function Home() {
   return (
     <div className="home">
