@@ -33,6 +33,8 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/ratings" element={<Rate />} />
           <Route path="/cart" element={<AddToCart/>} />
+          <Route path="/feedback" element={<FeedbackForm/>} />
+
 
           <Route
             path="/registration-success"
