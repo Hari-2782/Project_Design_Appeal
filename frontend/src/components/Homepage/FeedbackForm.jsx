@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-    TextField, Button, Container, Typography, LinearProgress, Box, Grow
+    TextField, Button, Container, Typography, LinearProgress, Box, Grow, Snackbar, Alert
 } from '@mui/material';
 
 const FeedbackForm = () => {
@@ -10,10 +10,26 @@ const FeedbackForm = () => {
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
+    const [errors, setErrors] = useState({});
+    const [openSnackbar, setOpenSnackbar] = useState(false);
     const navigate = useNavigate();
+
+    const validateForm = () => {
+        const newErrors = {};
+        if (!name.trim()) newErrors.name = 'Name is required';
+        if (!email.trim()) newErrors.email = 'Email is required';
+        else if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = 'Email is invalid';
+        if (!message.trim()) newErrors.message = 'Message is required';
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!validateForm()) {
+            setOpenSnackbar(true);
+            return;
+        }
         setLoading(true); // Show loading indicator
         try {
             const response = await fetch('/api/feedback/create', {
@@ -79,6 +95,8 @@ const FeedbackForm = () => {
                                     required
                                     variant="outlined"
                                     margin="normal"
+                                    error={!!errors.name}
+                                    helperText={errors.name}
                                 />
                                 <TextField
                                     label="Email"
@@ -89,6 +107,8 @@ const FeedbackForm = () => {
                                     required
                                     variant="outlined"
                                     margin="normal"
+                                    error={!!errors.email}
+                                    helperText={errors.email}
                                 />
                                 <TextField
                                     label="Message"
@@ -100,6 +120,8 @@ const FeedbackForm = () => {
                                     margin="normal"
                                     multiline
                                     rows={4}
+                                    error={!!errors.message}
+                                    helperText={errors.message}
                                 />
                                 <Box sx={{ position: 'relative', mt: 2 }}>
                                     <Button
@@ -129,6 +151,15 @@ const FeedbackForm = () => {
                     </Box>
                 </Grow>
             </Container>
+            <Snackbar
+                open={openSnackbar}
+                autoHideDuration={6000}
+                onClose={() => setOpenSnackbar(false)}
+            >
+                <Alert onClose={() => setOpenSnackbar(false)} severity="error">
+                    Please fix the form errors and try again.
+                </Alert>
+            </Snackbar>
         </Box>
     );
 };
