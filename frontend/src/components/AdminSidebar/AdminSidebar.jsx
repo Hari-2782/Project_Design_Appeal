@@ -265,6 +265,7 @@ function AdminSidebar(props) {
           <Route path="/materials/details" element={<MaterialDetail />} />
           <Route path="/materials/states" element={<MaterialStates />} />
           <Route path="/payment-history" element={<PaymentHistory />} />
+          
           <Route
             path="/mailing/PromotionalMail"
             element={<PromotionalMailPage />}
