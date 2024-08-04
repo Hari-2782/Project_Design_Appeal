@@ -2,6 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
+<<<<<<< HEAD
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { keyframes } from '@mui/system';
@@ -49,8 +50,18 @@ const ImageBox = styled(Box)(({ theme }) => ({
     transform: 'scale(1.1)',
   },
 }));
+=======
+import Typography from './Typography';
+import { useNavigate } from 'react-router-dom';
+>>>>>>> d24d98bd053f230900551bee9ed2acdbca7be86e
 
 function ProductSmokingHero() {
+  const navigate = useNavigate(); // Get the navigate function from useNavigate
+
+  const handleRedirect = () => {
+    navigate('/feedback'); // Use navigate to redirect to the feedback page
+  };
+
   return (
     <Container
       component="section"
@@ -62,6 +73,7 @@ function ProductSmokingHero() {
         textAlign: 'center',
       }}
     >
+<<<<<<< HEAD
       <StyledButton>
         <Typography variant="h4" component="span" fontWeight="bold">
           Got any questions? Need help?
@@ -85,6 +97,32 @@ function ProductSmokingHero() {
           sx={{ width: 50, height: 50 }}
         />
       </ImageBox>
+=======
+      <Button
+        sx={{
+          border: '4px solid currentColor',
+          borderRadius: 0,
+          height: 'auto',
+          py: 2,
+          px: 5,
+        }}
+        onClick={handleRedirect} // Attach the handleRedirect function to onClick
+      >
+        <Typography variant="h4" component="span">
+          Got any questions? Need help?
+        </Typography>
+      </Button>
+
+      <Typography variant="subtitle1" sx={{ my: 3 }}>
+        We are here to help. Get in touch!
+      </Typography>
+      <Box
+        component="img"
+        src="/contuct.png"
+        alt="Contact"
+        sx={{ width: 60 }}
+      />
+>>>>>>> d24d98bd053f230900551bee9ed2acdbca7be86e
     </Container>
   );
 }

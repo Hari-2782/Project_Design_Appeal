@@ -212,6 +212,10 @@ const Workstage = ({
   };
 
   const handleAddToCart = async () => {
+    if (!materialName) {
+      alert("Please select material first");
+      return;
+    }
     try {
       const newItem = {
         imageDataURL,

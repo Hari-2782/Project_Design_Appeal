@@ -1,10 +1,10 @@
 // src/components/ChatBot.js
-import React, { useState, useRef, useEffect } from 'react';
-import { Box, Paper, TextField, IconButton, List, ListItem, ListItemText, CircularProgress, Typography, Fade } from '@mui/material';
-import SendIcon from '@mui/icons-material/Send';
-import CloseIcon from '@mui/icons-material/Close';
 import ChatIcon from '@mui/icons-material/Chat';
+import CloseIcon from '@mui/icons-material/Close';
+import SendIcon from '@mui/icons-material/Send';
+import { Box, CircularProgress, Fade, IconButton, List, ListItem, ListItemText, Paper, TextField, Typography } from '@mui/material';
 import axios from 'axios';
+import React, { useEffect, useRef, useState } from 'react';
 
 // Predefined questions and dummy answers with variations
 const predefinedResponses = {
@@ -212,7 +212,8 @@ const ChatBot = () => {
                             alignItems: 'center'
                         }}
                     >
-                        <Typography variant="h6" style={{ fontWeight: 'bold' }}>ChatBot</Typography>
+                        <Typography variant="h6" style={{ fontWeight: 'bold' }}>Unique Creations
+                        </Typography>
                         <IconButton onClick={toggleChatBot} style={{ color: 'white' }}>
                             <CloseIcon />
                         </IconButton>

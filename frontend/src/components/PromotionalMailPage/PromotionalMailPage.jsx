@@ -11,7 +11,6 @@ const PromotionalMailPage = () => {
   const [showSendPrompt, setShowSendPrompt] = useState(false);
   const [email, setEmail] = useState('');
 
-  // Load mails from localStorage on component mount
   useEffect(() => {
     const storedMails = JSON.parse(localStorage.getItem('mails'));
     if (storedMails) {
@@ -19,7 +18,6 @@ const PromotionalMailPage = () => {
     }
   }, []);
 
-  // Save mails to localStorage whenever mails state changes
   useEffect(() => {
     localStorage.setItem('mails', JSON.stringify(mails));
   }, [mails]);
@@ -35,11 +33,26 @@ const PromotionalMailPage = () => {
     setShowEditor(false);
   };
 
-  const handleSendMail = () => {
-    // Logic to send mail
-    alert(`Mail sent to ${email}!`);
-    setShowSendPrompt(false);
-    setEmail('');
+  const handleSendMail = async () => {
+    try {
+      await fetch('/api/emails/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          to: email,
+          subject: 'Promotional Email',
+          body: currentMail,
+        }),
+      });
+      alert(`Mail sent to ${email}!`);
+      setShowSendPrompt(false);
+      setEmail('');
+    } catch (error) {
+      console.error('Error sending mail:', error);
+      alert('Failed to send email');
+    }
   };
 
   const handleEditMail = (id, content) => {
@@ -94,7 +107,10 @@ const PromotionalMailPage = () => {
             <div className="mail-content" dangerouslySetInnerHTML={{ __html: mail.content }} />
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
               <button
-                onClick={() => setShowSendPrompt(true)}
+                onClick={() => {
+                  setShowSendPrompt(true);
+                  setCurrentMail(mail.content);
+                }}
                 style={{ padding: '5px 10px' }}
               >
                 Send
