@@ -29,6 +29,7 @@ function App() {
           <Route path="/myproject" element={<EditSpace />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/ratings" element={<Rate />} />
+       
           <Route path="/cart" element={<AddToCart/>} />
           <Route path="/payment" element={<PaymentFormPage/>} />
           <Route

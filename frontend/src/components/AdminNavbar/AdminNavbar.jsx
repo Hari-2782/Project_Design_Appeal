@@ -10,7 +10,9 @@ import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
+// Import the logo image
+import Logo from "../images/logo.png"; // Adjust path if necessary
+
 
 const settings = ["Logout"];
 
@@ -37,7 +39,9 @@ function AdminNavbar() {
     <AppBar position="static" sx={{ backgroundColor: "#b71c1c" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+          {/* Replace AdbIcon with the logo image */}
+          <img src={Logo} alt="Logo" style={{ height: 40, marginRight: 16 }} />
+
           <Typography
             variant="h6"
             noWrap
@@ -88,25 +92,6 @@ function AdminNavbar() {
               {/* Add MenuItems here if needed */}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            LOGO
-          </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {/* Add Buttons here if needed */}
