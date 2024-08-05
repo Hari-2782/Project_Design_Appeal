@@ -27,50 +27,69 @@ function ProductCTA() {
             sx={{
               display: 'flex',
               justifyContent: 'center',
-              bgcolor: '#66aed8',
+              bgcolor: '#1A2A40', // Dark Blue
               py: 8,
               px: 3,
             }}
           >
             <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 400 }}>
-              <Typography variant="h2" component="h2" gutterBottom sx={{ color: 'white', textShadow: '2px 2px 4px black' }} >
-                Receive offers
+              <Typography 
+                variant="h2" 
+                component="h2" 
+                gutterBottom 
+                sx={{ 
+                  color: 'white', 
+                  textShadow: '3px 3px 5px rgba(0,0,0,0.6)', 
+                  fontSize: '2.5rem', 
+                  fontWeight: 700, 
+                  textAlign: 'center'
+                }} 
+              >
+                Stay Updated with Us
               </Typography>
               <Typography
                 variant="h5"
                 sx={{
                   textAlign: 'center',
-                  justifyContent: 'center',
-                  display: 'flex',
-                  alignItems: 'center',
-                  textShadow: '2px 2px 4px white',
-                  color: '#222730', // Italics style
-                  fontWeight: 600, // Bold weight
-                  letterSpacing: '0.1rem', // Adjust letter spacing
+                  color: '#E0E0E0',
+                  fontWeight: 500,
+                  letterSpacing: '0.15rem',
+                  lineHeight: 1.5,
+                  mb: 3
                 }}
               >
-                Design Your Day: Unique Custom Tees for Every Occasion!
+                Get the latest trends and exclusive offers for your custom tees directly to your inbox!
               </Typography>
               <TextField
                 noBorder
                 placeholder="Your email"
                 variant="standard"
-                sx={{ width: '100%', mt: 3, mb: 2 }}
+                sx={{
+                  width: '100%',
+                  mt: 3,
+                  mb: 2,
+                  backgroundColor: '#FFFFFF', // White background for input
+                  '& .MuiInputBase-input': {
+                    color: '#1A2A40', // Dark Blue text
+                  },
+                }}
               />
               <Button
-               type="submit"  variant="contained"
-               sx={{
-            minWidth: 400,
-            backgroundColor: '#282c34',
-            color: 'white',
-            fontWeight: 'bold',
-            padding: '12px 24px',
-            '&:hover': {
-              backgroundColor: '#4170cf',
-            },
-          }}>
-                    Keep me updated
-                </Button>
+                type="submit"
+                variant="contained"
+                sx={{
+                  minWidth: 400,
+                  backgroundColor: '#FFD700', // Gold for the button
+                  color: '#1A2A40', // Dark Blue text
+                  fontWeight: 'bold',
+                  padding: '12px 24px',
+                  '&:hover': {
+                    backgroundColor: '#FFB700', // Slightly darker Gold
+                  },
+                }}
+              >
+                Keep me updated
+              </Button>
             </Box>
           </Box>
         </Grid>

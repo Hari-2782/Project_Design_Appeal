@@ -35,12 +35,12 @@ function ProductSmokingHero() {
       <Typography variant="subtitle1" sx={{ my: 3 }}>
         We are here to help. Get in touch!
       </Typography>
-      <Box
+      {/* <Box
         component="img"
         src="/contuct.png"
         alt="Contact"
         sx={{ width: 60 }}
-      />
+      /> */}
     </Container>
   );
 }
