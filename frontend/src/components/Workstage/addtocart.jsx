@@ -20,12 +20,12 @@ import {
   IconButton
 } from '@mui/material';
 import { Add, Remove, Delete, ShoppingCart } from '@mui/icons-material';
-import generateHash from './hashGenerator'; // Ensure this function is available
-
+import generateHash from './hashGenerator'; 
 const AddToCart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [formData, setFormData] = useState({});
+  const [loading, setLoading] = useState(true); 
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -52,6 +52,8 @@ const AddToCart = () => {
         setCartItems(response.data.map(item => ({ ...item, selected: false })));
       } catch (error) {
         console.error("Error fetching cart items:", error);
+      } finally {
+        setLoading(false); 
       }
     };
     fetchCartItems();
@@ -165,16 +167,14 @@ const AddToCart = () => {
       };
 
       const hash = generateHash(
-        'MzU0NjEzODM5OTE5Mzk3ODAyNDgxMTEwNjA1NTY0OTE3Njk2NzM5', 
+        'MTY0OTg2ODk5MTExMjgwOTcxMDIyMjU0MjkwNTEzNzQzOTA3Nzk1', 
         formData.merchant_id,
         formData.order_id,
         formData.amount,
         formData.currency
       );
 
-
-
-      // Submit the form programmatically
+      setFormData({ ...formData, hash });
       setTimeout(() => {
         document.getElementById("payment-form").submit();
       }, 1000);
@@ -184,6 +184,16 @@ const AddToCart = () => {
       setIsProcessing(false);
     }
   };
+
+  if (loading) {
+    return (
+      <Container maxWidth="md">
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
+          <CircularProgress />
+        </Box>
+      </Container>
+    );
+  }
 
   return (
     <Container maxWidth="md">
@@ -244,71 +254,86 @@ const AddToCart = () => {
                             </Grid>
                           </Box>
                         </Grid>
-                        {!isProcessing && (
-                      <Tooltip title="Remove">
-                        <IconButton edge="end" onClick={() => handleRemove(item._id)}>
-                          <Delete />
-                        </IconButton>
-                      </Tooltip>
-                    )}
+
                         <Grid item xs={12} sm={3}>
-                          <Typography variant="h6" color="primary">${item.totalPrice}</Typography>
-                          <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
-                            <IconButton
-                              onClick={() => handleQuantityChange(item._id, item.quantity - 1)}
-                              disabled={item.quantity <= 1}
-                              size="small"
-                            >
-                              <Remove fontSize="small" />
-                            </IconButton>
+                          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Tooltip title="Decrease quantity" arrow>
+                              <IconButton
+                                color="primary"
+                                onClick={() => handleQuantityChange(item._id, item.quantity - 1)}
+                                disabled={item.quantity === 1}
+                              >
+                                <Remove />
+                              </IconButton>
+                            </Tooltip>
                             <TextField
                               value={item.quantity}
-                              variant="outlined"
+                              onChange={(e) => handleQuantityChange(item._id, parseInt(e.target.value))}
+                              inputProps={{ min: 1, max: item.availableQuantity, style: { textAlign: 'center' } }}
+                              type="number"
                               size="small"
-                              inputProps={{ readOnly: true, style: { textAlign: 'center', width: '40px' } }}
+                              sx={{ width: 60, mx: 1 }}
                             />
-                            <IconButton
-                              onClick={() => handleQuantityChange(item._id, item.quantity + 1)}
-                              disabled={item.quantity >= item.availableQuantity}
-                              size="small"
-                            >
-                              <Add fontSize="small" />
-                            </IconButton>
+                            <Tooltip title="Increase quantity" arrow>
+                              <IconButton
+                                color="primary"
+                                onClick={() => handleQuantityChange(item._id, item.quantity + 1)}
+                                disabled={item.quantity === item.availableQuantity}
+                              >
+                                <Add />
+                              </IconButton>
+                            </Tooltip>
                           </Box>
+                          <Tooltip title="Remove from cart" arrow>
+                            <IconButton
+                              color="secondary"
+                              onClick={() => handleRemove(item._id)}
+                              sx={{ mt: 1 }}
+                            >
+                              <Delete />
+                            </IconButton>
+                          </Tooltip>
                         </Grid>
                       </Grid>
+                      <Divider sx={{ my: 2 }} />
+                      <Typography variant="body2" align="right">Total: ${item.totalPrice * item.quantity}</Typography>
                     </CardContent>
-                 
                   </Card>
                 );
               })}
             </List>
-            <Divider sx={{ my: 3 }} />
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Typography variant="h5">
-                Total: ${cartItems.reduce((total, item) => item.selected ? total + (item.totalPrice * item.quantity) : total, 0).toFixed(2)}
-              </Typography>
+            <Divider sx={{ my: 2 }} />
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => navigate('/')}
+              >
+                Continue Shopping
+              </Button>
               <Button
                 variant="contained"
                 color="primary"
-                size="large"
                 onClick={handleCheckout}
                 disabled={isProcessing}
-                startIcon={isProcessing ? <CircularProgress size={24} /> : <ShoppingCart />}
               >
-                {isProcessing ? "Processing..." : "Checkout"}
+                {isProcessing ? <CircularProgress size={24} /> : 'Proceed to Checkout'}
               </Button>
             </Box>
           </Box>
         )}
       </Box>
 
-      {/* Hidden payment form */}
-      <form id="payment-form" method="post" action="https://sandbox.payhere.lk/pay/checkout">
-        {Object.entries(formData).map(([key, value]) => (
-          <input type="hidden" name={key} value={value} key={key} />
+      {/* Payment form */}
+      <form
+        method="post"
+        action="https://sandbox.payhere.lk/pay/checkout"
+        id="payment-form"
+        style={{ display: 'none' }}
+      >
+        {Object.keys(formData).map((key) => (
+          <input key={key} type="hidden" name={key} value={formData[key]} />
         ))}
-        <input type="submit" value="Buy Now" style={{ display: 'none' }} />
       </form>
     </Container>
   );
