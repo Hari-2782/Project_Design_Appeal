@@ -88,11 +88,8 @@ const descriptions = [
 function HowWeWorkSection() {
   return (
     <Box sx={{ 
-      bgcolor: '#f5f5f5', 
+      bgcolor: '#ffffff', // Changed background color to white
       py: 8,
-      backgroundImage: 'url(path/to/your/background-image.jpg)',
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
     }}>
       <Container maxWidth="lg">
         <Typography variant="h2" align="center" sx={{ mb: 6, color: '#333', fontWeight: 'bold' }}>
