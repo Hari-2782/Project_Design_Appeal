@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import {
@@ -100,43 +100,70 @@ const ReviewCard = ({ review }) => (
   </Grid>
 );
 
-const Rate = () => (
-  <Box
-    sx={{
-      flexGrow: 1,
-      padding: 8,
-      background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
-      minHeight: "100vh",
-      display: "flex",
-      alignItems: "center",
-    }}
-  >
-    <CssBaseline />
-    <Container maxWidth="lg">
-      <Typography 
-        variant="h2" 
-        align="center" 
-        sx={{ 
-          mb: 6, 
-          fontWeight: "bold", 
-          color: "#4B001E",
-          textShadow: "2px 2px 4px rgba(0,0,0,0.1)",
-        }}
-      >
-        Client Testimonials
-      </Typography>
-      <Grid container spacing={4}>
-        {reviews.map((review) => (
-          <ReviewCard key={review.id} review={review} />
-        ))}
-      </Grid>
-      <Box sx={{ display: "flex", justifyContent: "center", marginTop: 6 }}>
-        <StyledButton variant="contained" component={Link} to="/ratings">
-          View More Testimonials
-        </StyledButton>
-      </Box>
-    </Container>
-  </Box>
-);
+const Rate = () => {
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    if (userInfo && userInfo.name) {
+      setUserName(userInfo.name);
+    }
+  }, []);
+
+  return (
+    <Box
+      sx={{
+        flexGrow: 1,
+        padding: 8,
+        background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      <CssBaseline />
+      <Container maxWidth="lg">
+        <Typography
+          variant="h2"
+          align="center"
+          sx={{
+            mb: 6,
+            fontWeight: "bold",
+            color: "#4B001E",
+            textShadow: "2px 2px 4px rgba(0,0,0,0.1)",
+          }}
+        >
+          Client Testimonials
+        </Typography>
+        {userName && (
+          <Typography
+            variant="h5"
+            align="center"
+            sx={{
+              mb: 4,
+              fontWeight: "bold",
+              color: "#4B001E",
+            }}
+          >
+            Welcome, {userName}!
+          </Typography>
+        )}
+        <Grid container spacing={4}>
+          {reviews.map((review) => (
+            <ReviewCard key={review.id} review={review} />
+          ))}
+        </Grid>
+        <Box sx={{ display: "flex", justifyContent: "center", gap: 2, marginTop: 6 }}>
+          <StyledButton variant="contained" component={Link} to="/ratings">
+            View More Testimonials
+          </StyledButton>
+          <StyledButton variant="contained" component={Link} to="/addrate">
+            Add Your Review
+          </StyledButton>
+        </Box>
+      </Container>
+    </Box>
+  );
+};
 
 export default Rate;

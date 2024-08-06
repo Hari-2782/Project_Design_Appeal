@@ -1,75 +1,37 @@
-import React, { useState, useEffect } from "react";
-import { experimentalStyled as styled } from "@mui/material/styles";
-import {
-  Box,
-  Avatar,
-  Grid,
-  Typography,
-  Paper,
-  Rating as MuiRating,
-  CssBaseline,
-} from "@mui/material";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Box, Typography, Paper } from '@mui/material';
 
-const StyledPaper = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(2),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-  margin: theme.spacing(1),
-}));
-
-const StyledAvatar = styled(Avatar)(({ theme }) => ({
-  width: theme.spacing(7),
-  height: theme.spacing(7),
-  margin: "auto",
-}));
-
-const ReviewCard = ({ review }) => (
-  <Grid item xs={12} sm={6} md={4}>
-    <StyledPaper>
-      <StyledAvatar alt="User Image" src="https://via.placeholder.com/150" />
-      <Typography variant="h6" gutterBottom>
-        {review.userName || "Anonymous"}
-      </Typography>
-      <MuiRating value={review.rating} readOnly />
-      <Typography variant="body1">{review.review}</Typography>
-    </StyledPaper>
-  </Grid>
-);
-
-const Rate = () => {
+const ApprovedReviewList = () => {
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
-    const fetchReviews = async () => {
+    const fetchApprovedReviews = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/reviews");
+        const response = await axios.get('http://localhost:5000/api/reviews/approved');
         setReviews(response.data);
       } catch (error) {
-        console.error("Error fetching reviews:", error);
+        console.error('Error fetching approved reviews:', error);
       }
     };
 
-    fetchReviews();
+    fetchApprovedReviews();
   }, []);
 
   return (
-    <Box
-      sx={{ flexGrow: 1, padding: 3, width: "100vw", boxSizing: "border-box" }}
-    >
-      <CssBaseline />
-      <Typography variant="h4" align="center" color="#4B001E" gutterBottom>
-        Testimonials!
+    <Box>
+      <Typography variant="h4" component="h1" gutterBottom>
+        Approved Reviews
       </Typography>
-      <Grid container spacing={3}>
-        {reviews.map((review) => (
-          <ReviewCard key={review._id} review={review} />
-        ))}
-      </Grid>
+      {reviews.map(review => (
+        <Paper key={review._id} sx={{ p: 2, mb: 2 }}>
+          <Typography variant="h6">{review.userName}</Typography>
+          <Typography variant="body1">{review.review}</Typography>
+          <Typography variant="body2">Rating: {review.rating}</Typography>
+        </Paper>
+      ))}
     </Box>
   );
 };
 
-export default Rate;
+export default ApprovedReviewList;

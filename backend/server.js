@@ -1,4 +1,3 @@
-// app.js or server.js (your main app file)
 const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
@@ -6,11 +5,11 @@ const userRoutes = require("./routes/userRoutes");
 const materialRoutes = require("./routes/materialRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
 const cloudinaryRoutes = require("./routes/cloudinaryRoutes");
-const cartRoutes = require("./routes/Addcart");
+const cartRoutes = require('./routes/Addcart'); // Adjusted path
 const orderRoutes = require('./routes/orderRoutes');
 const emailRoutes = require('./routes/emailRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
-const feedbackRouter = require('./routes/feedbackRouter'); // Adjust the path as necessary
+const feedbackRouter = require('./routes/feedbackRouter'); // Adjusted path
 
 const { notFound, errorhandler } = require("./middlewares/errorMiddleware");
 const cors = require("cors");
@@ -29,14 +28,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/api/users", userRoutes);
 app.use("/api/materials", materialRoutes);
 app.use("/api/reviews", reviewRoutes);
-app.use("/api", cartRoutes);
+app.use("/api", cartRoutes); // Adjusted path
 app.use("/api/cloudinary", cloudinaryRoutes);
-app.use('/api', orderRoutes);
-app.use('/api/emails', emailRoutes); // Use new routes
+app.use("/api", orderRoutes); // Adjusted path
+app.use('/api/emails', emailRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/feedback', feedbackRouter);
-
-
 
 // Error handling middleware
 app.use(notFound);

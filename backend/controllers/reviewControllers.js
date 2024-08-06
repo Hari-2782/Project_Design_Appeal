@@ -1,37 +1,50 @@
-const asyncHandler = require("express-async-handler");
 const Review = require("../models/reviewModel");
 
-const submitReview = asyncHandler(async (req, res) => {
-  const { rating, review } = req.body;
-
-  if (!rating || !review) {
-    res.status(400);
-    throw new Error("Please add a rating and review");
-  }
-
+// Submit a new review
+const submitReview = async (req, res) => {
   try {
-    const newReview = new Review({
-      rating,
-      review,
-    });
-
-    const createdReview = await newReview.save();
-
-    res.status(201).json(createdReview);
+    const { userName, rating, review } = req.body;
+    const newReview = new Review({ userName, rating, review, status: 'pending' });
+    await newReview.save();
+    res.status(201).json(newReview);
   } catch (error) {
-    console.error(`Error saving review: ${error.message}`);
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ message: 'Error submitting review', error });
   }
-});
+};
 
-const getReviews = asyncHandler(async (req, res) => {
+// Get pending reviews
+const getPendingReviews = async (req, res) => {
   try {
-    const reviews = await Review.find({});
-    res.status(200).json(reviews);
+    const pendingReviews = await Review.find({ status: 'pending' });
+    res.json(pendingReviews);
   } catch (error) {
-    console.error(`Error fetching reviews: ${error.message}`);
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ message: 'Error fetching pending reviews', error });
   }
-});
+};
 
-module.exports = { submitReview, getReviews };
+// Approve a review
+const approveReview = async (req, res) => {
+  try {
+    await Review.findByIdAndUpdate(req.params.id, { status: 'approved' });
+    res.json({ message: 'Review approved' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error approving review', error });
+  }
+};
+
+// Reject a review
+const rejectReview = async (req, res) => {
+  try {
+    await Review.findByIdAndUpdate(req.params.id, { status: 'rejected' });
+    res.json({ message: 'Review rejected' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error rejecting review', error });
+  }
+};
+
+module.exports = {
+  submitReview,
+  getPendingReviews,
+  approveReview,
+  rejectReview,
+};

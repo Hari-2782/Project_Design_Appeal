@@ -14,9 +14,9 @@ import axios from "axios";
 
 // Predefined questions and dummy answers with variations
 const predefinedResponses = {
-  hi: `Hi ${
-    JSON.parse(localStorage.getItem("userInfo")).name
-  }, how can I help you?\nPlease type anything like "order", "payment", "date", "delivery", etc.`,
+  // hi: `Hi ${
+  //   JSON.parse(localStorage.getItem("userInfo")).name
+  // }, how can I help you?\nPlease type anything like "order", "payment", "date", "delivery", etc.`,
   "What is this app about":
     "This app allows you to design custom T-shirts by selecting materials, colors, and adding your own text and graphics.",
   "What is this app about growing your friend's blog?":

@@ -1,11 +1,17 @@
 const express = require("express");
-const {
-  submitReview,
-  getReviews,
-} = require("../controllers/reviewControllers");
+const reviewController = require("../controllers/reviewControllers");
 const router = express.Router();
 
-router.post("/", submitReview);
-router.get("/", getReviews);
+// Submit a new review
+router.post("/", reviewController.submitReview);
+
+// Get pending reviews
+router.get("/pending", reviewController.getPendingReviews);
+
+// Approve a review
+router.patch("/approve/:id", reviewController.approveReview);
+
+// Reject a review
+router.patch("/reject/:id", reviewController.rejectReview);
 
 module.exports = router;
