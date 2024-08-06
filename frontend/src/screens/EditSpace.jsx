@@ -9,12 +9,13 @@ import DesignNavBar from "../components/DesignNavBar/DesignNavBar";
 import ItemsBar from "../components/ItemsBar/ItemsBar";
 import Workstage from "../components/Workstage/Workstage";
 import "./EditSpace.css";
-
+import { red } from "@mui/material/colors";
+import { grey } from '@mui/material/colors';
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(0),
   textAlign: "center",
-  color: theme.palette.text.secondary,
+  color: theme.palette.text.primary,
   boxShadow: "none",
 }));
 
@@ -77,7 +78,7 @@ const EditSpace = () => {
                 <DesignNavBar />
               </Item>
             </Grid>
-            <Grid item xs={isSidebarOpen ? 4 : 1}>
+            <Grid item xs={isSidebarOpen ? 4 : 1} >
               <Item>
                 <ItemsBar
                   onToggleSidebar={toggleSidebar}
@@ -115,6 +116,8 @@ const EditSpace = () => {
           .sidebar {
             height: calc(100vh - ${navbarHeight}px);
             overflow-y: auto;
+          background-color: ${grey[300]};  
+             
           }
         `}
       />

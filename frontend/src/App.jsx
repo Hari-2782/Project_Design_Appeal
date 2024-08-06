@@ -31,13 +31,10 @@ function App() {
           <Route path="/" element={<SimpleContainer />} />
           <Route path="/myproject" element={<EditSpace />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/ratings" element={<Rate />} />
           <Route path="/cart" element={<AddToCart/>} />
-          <Route path="/feedback" element={<FeedbackForm />} />
-          <Route
-            path="/registration-success"
-            element={<RegistrationSuccess />}
-          />
+          <><Route path="/feedback" element={<FeedbackForm />} /><Route
+      path="/registration-success"
+      element={<RegistrationSuccess />} /></>
         </Routes>
         </ErrorBoundary>
       </ThemeProvider>

@@ -40,8 +40,9 @@ import PaymentHistory from "../PaymentHistory/PaymentHistory.jsx";
 import OrderHistory from "../OrderHistory/OrderHistory.jsx";
 import PromotionalMailPage from "../PromotionalMailPage/PromotionalMailPage.jsx";
 import PersonalMail from "../PersonalMail/PersonalMail.jsx";
+import { flexbox } from "@mui/system";
 
-const drawerWidth = 260;
+const drawerWidth = 250;
 
 const nestedListItems = [
   {
@@ -230,6 +231,7 @@ function AdminSidebar(props) {
           open={mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{ keepMounted: true }}
+          
           sx={{ display: { xs: "block", sm: "none" } }}
         >
           <DrawerContent />
@@ -237,11 +239,8 @@ function AdminSidebar(props) {
         <Drawer
           variant="permanent"
           sx={{
-            "& .MuiDrawer-paper": {
-              width: drawerWidth,
-              boxSizing: "border-box",
-              padding: 0, // Ensure there is no padding
-            },
+            display: { xs: 'none', sm: 'block' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
           }}
           open
         >
@@ -266,6 +265,7 @@ function AdminSidebar(props) {
           <Route path="/materials/details" element={<MaterialDetail />} />
           <Route path="/materials/states" element={<MaterialStates />} />
           <Route path="/payment-history" element={<PaymentHistory />} />
+          
           <Route
             path="/mailing/PromotionalMail"
             element={<PromotionalMailPage />}
@@ -288,73 +288,41 @@ function AdminSidebar(props) {
   function DrawerContent() {
     return (
       <div>
-        <Toolbar />
+        <Toolbar  />
         <Divider />
-        <List sx={{ padding: 0 }}>
+        <List sx={{ padding:0, overflow: 'hidden',paddingRight: "150px"  }}> {/* Add overflowY auto to handle scroll */}
           {nestedListItems.map((item) => (
             <React.Fragment key={item.text}>
               {item.children ? (
                 <>
-                  <ListItem disablePadding>
-                    <ListItemButton
-                      onClick={() => handleClick(item.text)}
-                      sx={{ paddingLeft: 2, paddingRight: 2 }}
-                    >
-                      <ListItemIcon sx={{ minWidth: 40 }}>
-                        {item.icon}
-                      </ListItemIcon>
-                      <ListItemText
-                        primary={item.text}
-                        sx={{ marginLeft: 0 }}
-                      />
-                      {openDrawer === item.text ? (
-                        <ExpandLess />
-                      ) : (
-                        <ExpandMore />
-                      )}
+                  <ListItem sx={{ display: 'flex'}}disablePadding>
+                    <ListItemButton onClick={() => handleClick(item.text)}sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <ListItemIcon>{item.icon}</ListItemIcon>
+                      <ListItemText  sx={{  flexGrow: 1 ,pr:1}} primary={item.text} />
+                      {openDrawer === item.text ? <ExpandLess  sx={{ ml: 6,display:'flex', }}/> : <ExpandMore sx={{ ml: 6 ,display:'flex',}}/> }
                     </ListItemButton>
                   </ListItem>
-                  <Collapse
-                    in={openDrawer === item.text}
-                    timeout="auto"
-                    unmountOnExit
-                  >
-                    <List component="div" disablePadding>
+                  <Collapse in={openDrawer === item.text} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding >
                       {item.children.map((child) => (
-                        <ListItem
+                        <ListItemButton
                           key={child.text}
-                          disablePadding
-                          sx={{ paddingLeft: 4 }}
+                          component={Link}
+                          to={child.path}
+                          sx={{ pl: 8,alignItems: 'center',}} // Indent child items
                         >
-                          <ListItemButton
-                            component={Link}
-                            to={child.path}
-                            sx={{ paddingLeft: 2, paddingRight: 2 }}
-                          >
-                            <ListItemIcon sx={{ minWidth: 40 }}>
-                              {child.icon}
-                            </ListItemIcon>
-                            <ListItemText
-                              primary={child.text}
-                              sx={{ marginLeft: 0 }}
-                            />
-                          </ListItemButton>
-                        </ListItem>
+                          <ListItemIcon sx={{ pr:12,  }}>{child.icon}</ListItemIcon>
+                          <ListItemText primary={child.text} />
+                        </ListItemButton>
                       ))}
                     </List>
                   </Collapse>
                 </>
               ) : (
-                <ListItem disablePadding>
-                  <ListItemButton
-                    component={Link}
-                    to={item.path}
-                    sx={{ paddingLeft: 2, paddingRight: 2 }}
-                  >
-                    <ListItemIcon sx={{ minWidth: 40 }}>
-                      {item.icon}
-                    </ListItemIcon>
-                    <ListItemText primary={item.text} sx={{ marginLeft: 0 }} />
+                <ListItem  key={item.text} disablePadding>
+                  <ListItemButton component={Link} to={item.path}>
+                    <ListItemIcon>{item.icon}</ListItemIcon>
+                    <ListItemText sx={{ pl:3  }}primary={item.text} />
                   </ListItemButton>
                 </ListItem>
               )}
@@ -364,7 +332,7 @@ function AdminSidebar(props) {
       </div>
     );
   }
-}
+}  
 
 AdminSidebar.propTypes = {
   window: PropTypes.func,

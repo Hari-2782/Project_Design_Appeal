@@ -5,6 +5,8 @@ import Konva from "konva";
 import Modal from "react-modal";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Typography from "../Homepage/Typography";
+import { Button } from "@mui/material";
 
 const Workstage = ({
   selectedApparel,
@@ -16,7 +18,7 @@ const Workstage = ({
   imagePrice = 100,
   textPrice = 50,
   onFinalImageReady,
-  materialName = ""
+  materialName = "",
 }) => {
   const navigate = useNavigate();
   const stageWidth = 850;
@@ -88,11 +90,16 @@ const Workstage = ({
   const handleColorChange = (image) => {
     if (!image) return null;
 
-    const colorRGB = typeof color === "string" ? Konva.Util.getRGB(color) : color;
+    const colorRGB =
+      typeof color === "string" ? Konva.Util.getRGB(color) : color;
 
     if (!colorRGB) return null;
 
-    const scaledImage = scaleImage(image, stageDimensions.width * 0.8, stageDimensions.height * 0.8);
+    const scaledImage = scaleImage(
+      image,
+      stageDimensions.width * 0.8,
+      stageDimensions.height * 0.8
+    );
 
     return (
       <Image
@@ -123,7 +130,11 @@ const Workstage = ({
 
   const handleAdditionalImage = (image) => {
     if (!image) return null;
-    const scaledImage = scaleImage(image, stageDimensions.width * 0.6, stageDimensions.height * 0.6);
+    const scaledImage = scaleImage(
+      image,
+      stageDimensions.width * 0.6,
+      stageDimensions.height * 0.6
+    );
     return (
       <Image
         image={image}
@@ -182,7 +193,7 @@ const Workstage = ({
     (color ? colorPrice : 0) +
     (image ? imagePrice : 0) +
     (text ? textPrice : 0) +
-    (materialPrice ) +
+    materialPrice +
     (selectedApparel && selectedApparel.price ? +selectedApparel.price : 0);
 
   const handleSaveImage = () => {
@@ -217,20 +228,18 @@ const Workstage = ({
         text,
         selectedApparel,
         totalPrice,
-       
       };
-  
-      console.log("Adding to cart:", newItem); 
-  
+
+      console.log("Adding to cart:", newItem);
+
       await axios.post("/api/cart", newItem);
-  
+
       setIsModalOpen(false);
       navigate("/cart");
     } catch (error) {
       console.error("Error adding item to cart:", error);
     }
   };
-  
 
   return (
     <div ref={containerRef} style={{ width: "100%", height: "100%" }}>
@@ -249,8 +258,15 @@ const Workstage = ({
         </Layer>
       </Stage>
       <div>
-        <p>Total Price: ${totalPrice}</p>
-        <button onClick={handleSaveImage}>Save Design</button>
+        <Typography>Total Price: ${totalPrice}</Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          sx={{ mt: 2 }}
+          onClick={handleSaveImage}
+        >
+          Save Design{" "}
+        </Button>
       </div>
       <Modal
         isOpen={isModalOpen}
@@ -272,10 +288,21 @@ const Workstage = ({
         }}
       >
         <div>
-          <img src={imageDataURL} alt="Final Design" style={{ maxWidth: "90%", maxHeight: "80%" }} />
-          <div style={{ marginTop: "20px", display: "flex", justifyContent: "space-between", width: "100%" }}>
-            <button onClick={() => setIsModalOpen(false)}>Cancel</button>
-            <button onClick={handleAddToCart}>Add to Cart</button>
+          <img
+            src={imageDataURL}
+            alt="Final Design"
+            style={{ maxWidth: "90%", maxHeight: "80%" }}
+          />
+          <div
+            style={{
+              marginTop: "20px",
+              display: "flex",
+              justifyContent: "space-between",
+              width: "100%",
+            }}
+          >
+            <Button  variant="contained" color="error" sx={{ mt: 2 }} onClick={() => setIsModalOpen(false)}>Cancel</Button>
+            <Button  variant="contained" color="primary" sx={{ mt: 2 }} onClick={handleAddToCart}>Add to Cart</Button>
           </div>
         </div>
       </Modal>

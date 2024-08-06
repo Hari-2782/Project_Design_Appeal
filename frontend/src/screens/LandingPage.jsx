@@ -10,7 +10,6 @@ import ReviewSection from "../components/Homepage/ReviewSection";
 import ChatBot from "../components/Homepage/ChatBot";
 
 
-
 function Home() {
   return (
     <div className="home">
@@ -22,6 +21,7 @@ function Home() {
       <HomeOffer />
       <HomeEnq />
       <ChatBot />
+      
       <div className="content-container"></div>
       <AppFooter />
     </div>
