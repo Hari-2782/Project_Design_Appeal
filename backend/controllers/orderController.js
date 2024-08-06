@@ -126,24 +126,49 @@ exports.deleteOrder = async (req, res) => {
     
   };
 
-exports.bulkDeleteOrders = async (req, res) => {
-    try {
-      const { ids } = req.body; // Get the array of order IDs from the request body
+// exports.bulkDeleteOrders = async (req, res) => {
+//     try {
+//       const { ids } = req.body; // Get the array of order IDs from the request body
   
-      if (!Array.isArray(ids) || ids.length === 0) {
-        return res.status(400).json({ message: 'No order IDs provided' });
-      }
+//       if (!Array.isArray(ids) || ids.length === 0) {
+//         return res.status(400).json({ message: 'No order IDs provided' });
+//       }
   
-      // Delete orders with the specified IDs
-      const result = await Order.deleteMany({ _id: { $in: ids } });
+//       // Delete orders with the specified IDs
+//       const result = await Order.deleteMany({ _id: { $in: ids } });
   
-      if (result.deletedCount === 0) {
-        return res.status(404).json({ message: 'No orders found to delete' });
-      }
+//       if (result.deletedCount === 0) {
+//         return res.status(404).json({ message: 'No orders found to delete' });
+//       }
   
-      res.status(200).json({ message: 'Orders deleted successfully' });
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
-  };
-  
+//       res.status(200).json({ message: 'Orders deleted successfully' });
+//     } catch (error) {
+//       res.status(500).json({ message: error.message });
+//     }
+//   };
+//   // Update order status endpoint
+// exports.updateOrderStatus = async (req, res) => {
+//   try {
+//     const { selectedItems, status } = req.body;
+//     const updateData = {};
+
+//     if (selectedItems !== undefined) {
+//       updateData.selectedItems = selectedItems;
+//     }
+
+//     if (status !== undefined) {
+//       updateData.state = status;
+//     }
+
+//     const order = await Order.findByIdAndUpdate(req.params.id, updateData, { new: true });
+//     if (!order) {
+//       return res.status(404).json({ message: 'Order not found' });
+//     }
+//     res.status(200).json({
+//       ...order.toObject(),
+//       orderNumber: order.formatOrderNumber(),
+//     });
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };

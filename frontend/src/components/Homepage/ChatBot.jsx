@@ -5,10 +5,14 @@ import SendIcon from '@mui/icons-material/Send';
 import { Box, CircularProgress, Fade, IconButton, List, ListItem, ListItemText, Paper, TextField, Typography } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
+const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+// Set the default name if userInfo or name is not available
+const userName = userInfo?.name || "folk";
 
 // Predefined questions and dummy answers with variations
 const predefinedResponses = {
-    "hi": `Hi ${JSON.parse(localStorage.getItem('userInfo')).name}, how can I help you?\nPlease type anything like "order", "payment", "date", "delivery", etc.`,
+    "hi": `Hi ${userName}, how can I help you?\nPlease type anything like "order", "payment", "date", "delivery", etc.`,
     "What is this app about": "This app allows you to design custom T-shirts by selecting materials, colors, and adding your own text and graphics.",
     "What is this app about growing your friend's blog?": "This app is not related to blogs. It focuses on customizing T-shirts.",
     "Can I add text to my T-shirt design": "Yes, you can add and customize text on your T-shirt design.",

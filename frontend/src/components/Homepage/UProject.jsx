@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
 import Container from '@mui/material/Container';
 import Typography from './Typography';
+import { useNavigate } from 'react-router-dom';
 
 const ImageBackdrop = styled('div')(({ theme }) => ({
   position: 'absolute',
@@ -54,28 +55,33 @@ const ImageIconButton = styled(ButtonBase)(({ theme }) => ({
 }));
 
 const images = [
-  
- 
   {
     url: 'https://5.imimg.com/data5/SELLER/Default/2020/8/ZY/RR/VR/20499095/sublimation-all-over-printed-t-shirts.jpg',
     title: 'Sport Jersey',
     width: '38%',
+    path: '/voting'  // Path for navigation
   },
   {
     url: 'https://static.vecteezy.com/system/resources/previews/025/120/446/non_2x/multi-colored-abstract-pattern-on-fashionable-t-shirt-generated-by-ai-photo.jpg',
     title: 'Printing',
     width: '38%',
+    path: '/voting'  // Path for navigation
   },
   {
     url: 'https://t4.ftcdn.net/jpg/07/13/97/53/360_F_713975382_qzXFQBWRMbn5fDJi5jMvVDyRDZA0c36U.jpg',
     title: 'BulkShipping',
     width: '24%',
+    path: '/voting'  // Path for navigation
   },
-  
-  
 ];
 
 export default function ProductCategories() {
+  const navigate = useNavigate();  // Hook for navigation
+
+  const handleClick = (path) => {
+    navigate(path);  // Navigate to the provided path
+  };
+
   return (
     <Container component="section" sx={{ mt: 8, mb: 4 }}>
       <Typography variant="h3" marked="center" align="center" component="h2" sx={{ textShadow: '2px 2px 4px black', mb: 5, mt: 15 }}>
@@ -88,6 +94,7 @@ export default function ProductCategories() {
             style={{
               width: image.width,
             }}
+            onClick={() => handleClick(image.path)}  // Handle click
           >
             <Box
               sx={{

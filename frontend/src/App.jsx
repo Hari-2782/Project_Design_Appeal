@@ -13,9 +13,8 @@ import Profile from "./components/Homepage/Profile";
 import Rate from "./components/Rate & Rev/Rate";
 import ErrorBoundary from "./error";
 import AddToCart from "./components/Workstage/addtocart";
-
 import FeedbackForm from "./components/Homepage/FeedbackForm";
-
+import VotingPage from "./components/Workstage/votes";
 
 
 function App() {
@@ -32,9 +31,12 @@ function App() {
           <Route path="/myproject" element={<EditSpace />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/cart" element={<AddToCart/>} />
-          <><Route path="/feedback" element={<FeedbackForm />} /><Route
-      path="/registration-success"
-      element={<RegistrationSuccess />} /></>
+          <><Route path="/feedback" element={<FeedbackForm />} />
+          <Route path="/voting" element={<VotingPage/>} />
+          <Route path="/ratings" element={<Rate />} />
+          <Route
+        path="/registration-success"
+        element={<RegistrationSuccess />} /></>
         </Routes>
         </ErrorBoundary>
       </ThemeProvider>

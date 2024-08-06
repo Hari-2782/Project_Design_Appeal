@@ -210,14 +210,23 @@ const Workstage = ({
       });
     }
   };
-
+  
   const handleAddToCart = async () => {
     if (!materialName) {
       alert("Please select material first");
       return;
     }
+    const userInfo = localStorage.getItem("userInfo");
+    const parsedUserInfo = JSON.parse(userInfo);
+
+    if (!parsedUserInfo || !parsedUserInfo._id) {
+      alert("User not logged in");
+      return;
+    }
+
     try {
       const newItem = {
+        userId: parsedUserInfo._id,
         imageDataURL,
         color,
         materialName,

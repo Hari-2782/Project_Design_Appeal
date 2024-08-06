@@ -63,21 +63,21 @@ const TShirtSelector = ({
 
   const handleTypeSelect = (type) => {
     const selectedTShirt = tshirts.find((tshirt) => tshirt.type === type);
-    setSelectedOptions({
-      type,
-      collar: selectedTShirt.collars[0] || "",
-      sleeves: selectedTShirt.sleeves[0] || "",
-      fits: selectedTShirt.fits[0] || "",
-      sizes: selectedTShirt.sizes[0] || "",
-      price: selectedTShirt.price, // Set the price
-    });
-  };
-
-  const handleSelectChange = (event, type) => {
-    const { name, value } = event.target;
     setSelectedOptions((prevOptions) => ({
       ...prevOptions,
       type,
+      collar: prevOptions.collar || selectedTShirt.collars[0],
+      sleeves: prevOptions.sleeves || selectedTShirt.sleeves[0],
+      fits: prevOptions.fits || selectedTShirt.fits[0],
+      sizes: prevOptions.sizes || selectedTShirt.sizes[0],
+      price: selectedTShirt.price,
+    }));
+  };
+
+  const handleSelectChange = (event) => {
+    const { name, value } = event.target;
+    setSelectedOptions((prevOptions) => ({
+      ...prevOptions,
       [name]: value,
     }));
   };
@@ -112,7 +112,7 @@ const TShirtSelector = ({
                         ? selectedOptions.collar
                         : ""
                     }
-                    onChange={(event) => handleSelectChange(event, item.type)}
+                    onChange={handleSelectChange}
                   >
                     {item.collars.map((collar) => (
                       <FormControlLabel
@@ -134,7 +134,7 @@ const TShirtSelector = ({
                         ? selectedOptions.sleeves
                         : ""
                     }
-                    onChange={(event) => handleSelectChange(event, item.type)}
+                    onChange={handleSelectChange}
                   >
                     {item.sleeves.map((sleeve) => (
                       <FormControlLabel
@@ -159,7 +159,7 @@ const TShirtSelector = ({
                         ? selectedOptions.fits
                         : ""
                     }
-                    onChange={(event) => handleSelectChange(event, item.type)}
+                    onChange={handleSelectChange}
                     fullWidth
                     sx={{
                       "& .MuiSelect-select": {
@@ -194,7 +194,7 @@ const TShirtSelector = ({
                         ? selectedOptions.sizes
                         : ""
                     }
-                    onChange={(event) => handleSelectChange(event, item.type)}
+                    onChange={handleSelectChange}
                     fullWidth
                     sx={{
                       "& .MuiSelect-select": {

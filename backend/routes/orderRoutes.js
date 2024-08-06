@@ -7,7 +7,7 @@ router.get('/orders', orderController.getOrders);
 router.get('/orders/:id', orderController.getOrderById);
 router.patch('/orders/:id', orderController.updateOrder);
 router.delete('/orders/:id', orderController.deleteOrder);
-// routes/orderRoutes.js
-router.post('/orders/delete', orderController.bulkDeleteOrders);
-
+// // routes/orderRoutes.js
+// router.post('/orders/delete', orderController.bulkDeleteOrders);
+// router.put('/:id/update', orderController.updateOrderStatus);
 module.exports = router;

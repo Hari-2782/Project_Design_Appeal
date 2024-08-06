@@ -115,7 +115,7 @@ const JerseySelector = ({
       {selectedOptions.type && (
         <Grid item xs={12} style={{ textAlign: "center", marginTop: "16px" }}>
           <Typography variant="h6">
-            Selected Apparel Price: ₹{selectedOptions.price}
+            Selected Apparel Price: Lkr{selectedOptions.price}.00
           </Typography>
         </Grid>
       )}

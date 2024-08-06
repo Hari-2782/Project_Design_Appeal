@@ -19,8 +19,9 @@ import {
   Tooltip,
   IconButton
 } from '@mui/material';
-import { Add, Remove, Delete, ShoppingCart } from '@mui/icons-material';
+import { Add, Remove, Delete, ShoppingCart, ThumbUp  } from '@mui/icons-material';
 import generateHash from './hashGenerator'; 
+
 const AddToCart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -31,25 +32,48 @@ const AddToCart = () => {
   const queryParams = new URLSearchParams(location.search);
   const orderId = queryParams.get('order_id');
 
-  useEffect(() => {
-    if (orderId) {
-      const handleOrderCompletion = async () => {
-        await Promise.all(
-          cartItems
-            .filter((item) => item.selected)
-            .map((item) => axios.delete(`/api/cart/${item._id}`))
-        );
-        setCartItems(cartItems.filter((item) => !item.selected));
-      };
-      handleOrderCompletion();
-    }
-  }, [orderId, cartItems]);
+// useEffect(() => {
+//   if (orderId) {
+//     const handleOrderCompletion = async () => {
+//       try {
+//         // Fetch the order details
+//         const response = await axios.get(`/api/orders/${orderId}`);
+//         const order = response.data;
+//         const selectedItemIds = order.selectedItems; // Modify according to your actual response structure
+
+//         // Filter cart items to delete those matching selected item IDs
+//         const itemsToDelete = cartItems.filter((item) => selectedItemIds.includes(item._id));
+
+//         // Perform the deletion of selected items from the cart
+//         await Promise.all(
+//           itemsToDelete.map((item) => axios.delete(`/api/cart/${item._id}`))
+//         );
+
+//         // Update the local state to reflect the changes
+//         setCartItems(cartItems.filter((item) => !selectedItemIds.includes(item._id)));
+
+//         // Clear the selected items in the order
+//         await axios.put(`/api/${orderId}/update`, {
+//           selectedItems: [], // Clear the selectedItems array
+//         });
+
+//       } catch (error) {
+//         console.error("Error completing order:", error);
+//       }
+//     };
+
+//     handleOrderCompletion();
+//   }
+// }, [orderId, cartItems]);
+
 
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
         const response = await axios.get("/api/cart");
-        setCartItems(response.data.map(item => ({ ...item, selected: false })));
+        const userId = JSON.parse(localStorage.getItem('userInfo'))._id;
+        const filteredItems = response.data.filter(item => item.userId === userId);
+        setCartItems(filteredItems.map(item => ({ ...item, selected: false })));
       } catch (error) {
         console.error("Error fetching cart items:", error);
       } finally {
@@ -115,6 +139,15 @@ const AddToCart = () => {
     ));
   };
 
+  const handleVote = async (imageURL) => {
+    try {
+      await axios.post("/api/votes/v", { imageURL });
+      alert("Vote submitted successfully!");
+    } catch (error) {
+      console.error("Error voting for design:", error);
+    }
+  };
+
   const handleCheckout = async () => {
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     if (!userInfo) {
@@ -140,12 +173,13 @@ const AddToCart = () => {
       const total = selectedItems.reduce((total, item) => total + (item.totalPrice * item.quantity), 0);
 
       const orderDetails = cartDetails.map(item => `${item.materialName} - ${item.apparelType} - ${item.quantity}`).join(', ');
-
+      const selectedItemIds = selectedItems.map(item => item._id);
       const response = await axios.post("/api/orders", {
         customerName: userInfo.name,
         orderDetails,
         userId: userInfo._id,
-        total
+        total,
+        selectedItemIds
       });
 
       const formData = {
@@ -173,7 +207,9 @@ const AddToCart = () => {
         formData.amount,
         formData.currency
       );
-
+      await Promise.all(selectedItems.map(item => axios.delete(`/api/cart/${item._id}`)));
+      setCartItems(cartItems.filter(item => !item.selected));
+      
       setFormData({ ...formData, hash });
       setTimeout(() => {
         document.getElementById("payment-form").submit();
@@ -254,85 +290,91 @@ const AddToCart = () => {
                             </Grid>
                           </Box>
                         </Grid>
-
-                        <Grid item xs={12} sm={3}>
-                          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Tooltip title="Decrease quantity" arrow>
+                     
+                        <Grid item xs={12} sm={3} container direction="column" spacing={1}>
+                          <Grid item>
+                            <Tooltip title="Increase Quantity">
                               <IconButton
-                                color="primary"
-                                onClick={() => handleQuantityChange(item._id, item.quantity - 1)}
-                                disabled={item.quantity === 1}
-                              >
-                                <Remove />
-                              </IconButton>
-                            </Tooltip>
-                            <TextField
-                              value={item.quantity}
-                              onChange={(e) => handleQuantityChange(item._id, parseInt(e.target.value))}
-                              inputProps={{ min: 1, max: item.availableQuantity, style: { textAlign: 'center' } }}
-                              type="number"
-                              size="small"
-                              sx={{ width: 60, mx: 1 }}
-                            />
-                            <Tooltip title="Increase quantity" arrow>
-                              <IconButton
-                                color="primary"
+                                size="small"
                                 onClick={() => handleQuantityChange(item._id, item.quantity + 1)}
-                                disabled={item.quantity === item.availableQuantity}
                               >
                                 <Add />
                               </IconButton>
                             </Tooltip>
-                          </Box>
-                          <Tooltip title="Remove from cart" arrow>
-                            <IconButton
-                              color="secondary"
-                              onClick={() => handleRemove(item._id)}
-                              sx={{ mt: 1 }}
+                            <TextField
+                              type="number"
+                              size="small"
+                              value={item.quantity}
+                              onChange={(e) => handleQuantityChange(item._id, parseInt(e.target.value))}
+                              inputProps={{ min: 1 }}
+                            />
+                            <Tooltip title="Decrease Quantity">
+                              <IconButton
+                                size="small"
+                                onClick={() => item.quantity > 1 && handleQuantityChange(item._id, item.quantity - 1)}
+                              >
+                                <Remove />
+                              </IconButton>
+                            </Tooltip>
+                          </Grid>
+                        
+                          <Grid item>
+                            <Typography variant="h6">
+                              Total: ${(item.totalPrice * item.quantity).toFixed(2)}
+                            </Typography>
+                          </Grid>
+                          <Grid item>
+                            <Button
+                              variant="outlined"
+                              color="primary"
+                              onClick={() => handleVote(item.imageDataURL)}
                             >
-                              <Delete />
-                            </IconButton>
-                          </Tooltip>
+                              Vote for Design
+                              <ThumbUp sx={{ ml: 1 }} />
+                            </Button>
+                          </Grid>
+                          <Grid item>
+                            <Tooltip title="Remove Item">
+                              <IconButton
+                                size="small"
+                                color="secondary"
+                                onClick={() => handleRemove(item._id)}
+                              >
+                                <Delete />
+                              </IconButton>
+                            </Tooltip>
+                          </Grid>
                         </Grid>
                       </Grid>
-                      <Divider sx={{ my: 2 }} />
-                      <Typography variant="body2" align="right">Total: ${item.totalPrice * item.quantity}</Typography>
                     </CardContent>
                   </Card>
                 );
               })}
             </List>
             <Divider sx={{ my: 2 }} />
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={() => navigate('/')}
-              >
-                Continue Shopping
-              </Button>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <Button
                 variant="contained"
                 color="primary"
                 onClick={handleCheckout}
                 disabled={isProcessing}
               >
-                {isProcessing ? <CircularProgress size={24} /> : 'Proceed to Checkout'}
+                {isProcessing ? 'Processing...' : 'Checkout'}
+              </Button>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={() => navigate('/')}
+              >
+                Continue Shopping
               </Button>
             </Box>
           </Box>
         )}
       </Box>
-
-      {/* Payment form */}
-      <form
-        method="post"
-        action="https://sandbox.payhere.lk/pay/checkout"
-        id="payment-form"
-        style={{ display: 'none' }}
-      >
-        {Object.keys(formData).map((key) => (
-          <input key={key} type="hidden" name={key} value={formData[key]} />
+      <form id="payment-form" action="https://sandbox.payhere.lk/pay/checkout" method="POST" style={{ display: 'none' }}>
+        {Object.entries(formData).map(([key, value]) => (
+          <input type="hidden" name={key} value={value} key={key} />
         ))}
       </form>
     </Container>

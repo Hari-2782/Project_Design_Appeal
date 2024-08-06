@@ -25,6 +25,10 @@ const orderSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
+  selectedItemIds: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'CartItem', // Assuming you have a CartItem model for cart items
+  }],
 }, { timestamps: true });
 
 orderSchema.plugin(AutoIncrement, { inc_field: 'orderNumber', id: 'orderNumber_seq', start_seq: 1 });

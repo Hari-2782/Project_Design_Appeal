@@ -21,7 +21,7 @@ const settings = ["Profile", "Account", "Dashboard", "Logout"];
 function DesignNavBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [textFieldValue, setTextFieldValue] = React.useState("New file");
+  const [textFieldValue, setTextFieldValue] = React.useState("");
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -136,12 +136,12 @@ function DesignNavBar() {
           </Typography>
 
           <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
-            <IconButton onClick={handleUndo} color="inherit" sx={{ mx: 1 }}>
+            {/* <IconButton onClick={handleUndo} color="inherit" sx={{ mx: 1 }}>
               <UndoIcon sx={{ fontSize: 30, transform: "rotate(90deg)" }} />
             </IconButton>
             <IconButton onClick={handleRedo} color="inherit" sx={{ mx: 1 }}>
               <RedoIcon sx={{ fontSize: 30, transform: "rotate(-90deg)" }} />
-            </IconButton>
+            </IconButton> */}
 
             <TextField
               value={textFieldValue}

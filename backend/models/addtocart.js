@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const CartItemSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   imageDataURL: { type: String, required: true },
   color: { type: String, required: true },
   materialName: { type: String, required: true },

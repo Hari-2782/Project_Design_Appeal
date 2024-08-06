@@ -167,7 +167,7 @@ export default function Login() {
                 </Link>
                 <Typography variant="body2">
                   Don't have an account?{" "}
-                  <Link href="#" variant="body2">
+                  <Link href="/register" variant="body2">
                     Register
                   </Link>
                 </Typography>

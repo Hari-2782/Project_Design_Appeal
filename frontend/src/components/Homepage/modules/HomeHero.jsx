@@ -93,7 +93,7 @@ export default function ProductHero() {
           variant="contained"
           size="large"
           component="a"
-          href="//sign-up/"
+          href="http://localhost:5173/register"
           sx={{
             minWidth: 250,
             backgroundColor: "#282c34",

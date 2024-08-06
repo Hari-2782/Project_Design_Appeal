@@ -7,6 +7,7 @@ const router = express.Router();
 router.post("/cart", async (req, res) => {
   try {
     const {
+      userId,
       color,
       colorPrice,
       imageDataURL,
@@ -21,12 +22,13 @@ router.post("/cart", async (req, res) => {
     } = req.body;
 
     // Validate required fields
-    if (!materialName || !imageDataURL || !color || !materialPrice || !colorPrice || !imagePrice || !textPrice || !selectedApparel || !totalPrice) {
+    if (!userId ||!materialName || !imageDataURL || !color || !materialPrice || !colorPrice || !imagePrice || !textPrice || !selectedApparel || !totalPrice) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
     // Create new cart item
     const newCartItem = new CartItem({
+      userId, 
       imageDataURL,
       color,
       materialName,
