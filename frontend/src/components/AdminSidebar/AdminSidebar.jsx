@@ -41,6 +41,7 @@ import OrderHistory from "../OrderHistory/OrderHistory.jsx";
 import PromotionalMailPage from "../PromotionalMailPage/PromotionalMailPage.jsx";
 import PersonalMail from "../PersonalMail/PersonalMail.jsx";
 import { flexbox } from "@mui/system";
+import AdminReviewList from "../Adminreviewapprove/AdminReviewList.jsx";
 
 const drawerWidth = 250;
 
@@ -120,7 +121,7 @@ const nestedListItems = [
     ],
   },
   { text: "Invoice", icon: <ReceiptIcon />, path: "/admin/invoice" },
-  { text: "feedbacks", icon: <SettingsIcon />, path: "/admin/settings" },
+  { text: "feedbacks", icon: <SettingsIcon />, path: "/Adminreviewapprove/AdminReviewList" },
 ];
 
 function AdminSidebar(props) {
@@ -265,7 +266,7 @@ function AdminSidebar(props) {
           <Route path="/materials/details" element={<MaterialDetail />} />
           <Route path="/materials/states" element={<MaterialStates />} />
           <Route path="/payment-history" element={<PaymentHistory />} />
-          
+          <Route path="/review" element={<AdminReviewList />} />
           <Route
             path="/mailing/PromotionalMail"
             element={<PromotionalMailPage />}

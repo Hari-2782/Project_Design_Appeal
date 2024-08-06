@@ -15,6 +15,9 @@ import ErrorBoundary from "./error";
 import AddToCart from "./components/Workstage/addtocart";
 import FeedbackForm from "./components/Homepage/FeedbackForm";
 import VotingPage from "./components/Workstage/votes";
+import RateForm from "./components/Rate Form/RateForm";
+import AdminReviewApproval from "./components/Adminreviewapprove/AdminReviewList";
+import AdminReviewList from "./components/Adminreviewapprove/AdminReviewList";
 
 
 function App() {
@@ -34,6 +37,11 @@ function App() {
           <><Route path="/feedback" element={<FeedbackForm />} />
           <Route path="/voting" element={<VotingPage/>} />
           <Route path="/ratings" element={<Rate />} />
+          <Route path="/ratings" element={<Rate />} />
+          <Route path="/addrate" element={<RateForm />} />
+          <Route path="/cart" element={<AddToCart/>} />
+          <Route path="/feedback" element={<FeedbackForm/>} />
+          <Route path="/ap" element={<AdminReviewList/>} />
           <Route
         path="/registration-success"
         element={<RegistrationSuccess />} /></>
