@@ -10,6 +10,7 @@ router.get("/pending", reviewController.getPendingReviews);
 
 // Approve a review
 router.patch("/approve/:id", reviewController.approveReview);
+router.get("/approved", reviewController.getaproveReviews);
 
 // Reject a review
 router.patch("/reject/:id", reviewController.rejectReview);

@@ -21,7 +21,14 @@ const getPendingReviews = async (req, res) => {
     res.status(500).json({ message: 'Error fetching pending reviews', error });
   }
 };
-
+const getaproveReviews = async (req, res) => {
+  try {
+    const acceptReviews = await Review.find({ status: 'approved' });
+    res.json(acceptReviews);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching pending reviews', error });
+  }
+};
 // Approve a review
 const approveReview = async (req, res) => {
   try {
@@ -47,4 +54,5 @@ module.exports = {
   getPendingReviews,
   approveReview,
   rejectReview,
+  getaproveReviews,
 };

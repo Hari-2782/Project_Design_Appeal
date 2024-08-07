@@ -57,19 +57,19 @@ const ImageIconButton = styled(ButtonBase)(({ theme }) => ({
 const images = [
   {
     url: 'https://5.imimg.com/data5/SELLER/Default/2020/8/ZY/RR/VR/20499095/sublimation-all-over-printed-t-shirts.jpg',
-    title: 'Sport Jersey',
+    title: 'Gave',
     width: '38%',
     path: '/voting'  // Path for navigation
   },
   {
     url: 'https://static.vecteezy.com/system/resources/previews/025/120/446/non_2x/multi-colored-abstract-pattern-on-fashionable-t-shirt-generated-by-ai-photo.jpg',
-    title: 'Printing',
+    title: 'your',
     width: '38%',
     path: '/voting'  // Path for navigation
   },
   {
     url: 'https://t4.ftcdn.net/jpg/07/13/97/53/360_F_713975382_qzXFQBWRMbn5fDJi5jMvVDyRDZA0c36U.jpg',
-    title: 'BulkShipping',
+    title: 'voting',
     width: '24%',
     path: '/voting'  // Path for navigation
   },

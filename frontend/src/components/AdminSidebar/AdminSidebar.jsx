@@ -42,6 +42,7 @@ import PromotionalMailPage from "../PromotionalMailPage/PromotionalMailPage.jsx"
 import PersonalMail from "../PersonalMail/PersonalMail.jsx";
 import { flexbox } from "@mui/system";
 import AdminReviewList from "../Adminreviewapprove/AdminReviewList.jsx";
+import FeedbackList from "../feedback/FeedbackList.jsx";
 
 const drawerWidth = 250;
 
@@ -94,11 +95,11 @@ const nestedListItems = [
       },
     ],
   },
-  {
-    text: "Payment History",
-    icon: <HistoryIcon />,
-    path: "/admin/payment-history",
-  },
+  // {
+  //   text: "Payment History",
+  //   icon: <HistoryIcon />,
+  //   path: "/admin/payment-history",
+  // },
   {
     text: "Mailing",
     icon: <MailIcon />,
@@ -113,15 +114,15 @@ const nestedListItems = [
         icon: <MailIcon />,
         path: "/admin/mailing/PersonalMail",
       },
-      {
-        text: "MailHistory",
-        icon: <HistoryIcon />,
-        path: "/admin/mailing/MailHistory",
-      },
+      // {
+      //   text: "MailHistory",
+      //   icon: <HistoryIcon />,
+      //   path: "/admin/mailing/MailHistory",
+      // },
     ],
   },
-  { text: "Invoice", icon: <ReceiptIcon />, path: "/admin/invoice" },
-  { text: "feedbacks", icon: <SettingsIcon />, path: "/Adminreviewapprove/AdminReviewList" },
+  { text: "Reviews", icon: <ReceiptIcon />, path: "/admin/review" },
+  { text: "Feedbacks", icon: <SettingsIcon />, path: "/admin/feedback" },
 ];
 
 function AdminSidebar(props) {
@@ -267,6 +268,7 @@ function AdminSidebar(props) {
           <Route path="/materials/states" element={<MaterialStates />} />
           <Route path="/payment-history" element={<PaymentHistory />} />
           <Route path="/review" element={<AdminReviewList />} />
+          <Route path="/feedback" element={<FeedbackList/>} />
           <Route
             path="/mailing/PromotionalMail"
             element={<PromotionalMailPage />}
