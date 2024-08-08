@@ -17,55 +17,24 @@ import {
   Container,
   List,
   Tooltip,
-  IconButton
+  IconButton,
+  Snackbar,
+  Alert
 } from '@mui/material';
-import { Add, Remove, Delete, ShoppingCart, ThumbUp  } from '@mui/icons-material';
-import generateHash from './hashGenerator'; 
+import { Add, Remove, Delete, ShoppingCart, ThumbUp } from '@mui/icons-material';
+import generateHash from './hashGenerator';
 
 const AddToCart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(true); 
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const orderId = queryParams.get('order_id');
-
-// useEffect(() => {
-//   if (orderId) {
-//     const handleOrderCompletion = async () => {
-//       try {
-//         // Fetch the order details
-//         const response = await axios.get(`/api/orders/${orderId}`);
-//         const order = response.data;
-//         const selectedItemIds = order.selectedItems; // Modify according to your actual response structure
-
-//         // Filter cart items to delete those matching selected item IDs
-//         const itemsToDelete = cartItems.filter((item) => selectedItemIds.includes(item._id));
-
-//         // Perform the deletion of selected items from the cart
-//         await Promise.all(
-//           itemsToDelete.map((item) => axios.delete(`/api/cart/${item._id}`))
-//         );
-
-//         // Update the local state to reflect the changes
-//         setCartItems(cartItems.filter((item) => !selectedItemIds.includes(item._id)));
-
-//         // Clear the selected items in the order
-//         await axios.put(`/api/${orderId}/update`, {
-//           selectedItems: [], // Clear the selectedItems array
-//         });
-
-//       } catch (error) {
-//         console.error("Error completing order:", error);
-//       }
-//     };
-
-//     handleOrderCompletion();
-//   }
-// }, [orderId, cartItems]);
-
 
   useEffect(() => {
     const fetchCartItems = async () => {
@@ -155,15 +124,15 @@ const AddToCart = () => {
       return;
     }
 
+    const selectedItems = cartItems.filter(item => item.selected);
+    if (selectedItems.length === 0) {
+      setSnackbarMessage('🚨 No items selected for checkout. Please select items before proceeding.');
+      setSnackbarOpen(true);
+      return;
+    }
+
     setIsProcessing(true);
     try {
-      const selectedItems = cartItems.filter(item => item.selected);
-      if (selectedItems.length === 0) {
-        alert('No items selected for checkout.');
-        setIsProcessing(false);
-        return;
-      }
-
       const cartDetails = selectedItems.map(item => ({
         materialName: item.materialName,
         apparelType: item.selectedApparel.type,
@@ -221,6 +190,10 @@ const AddToCart = () => {
     }
   };
 
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
   if (loading) {
     return (
       <Container maxWidth="md">
@@ -234,7 +207,7 @@ const AddToCart = () => {
   return (
     <Container maxWidth="md">
       <Box sx={{ py: 4 }}>
-        <Typography variant="h4" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
+        <Typography variant="h4" gutterBottom sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
           <ShoppingCart sx={{ mr: 2 }} />
           Your Shopping Cart
         </Typography>
@@ -252,27 +225,26 @@ const AddToCart = () => {
                 const materialPrice = item.materialPrice > 0 ? item.materialPrice : 50;
 
                 return (
-                  <Card key={item._id} sx={{ mb: 2 }}>
+                  <Card key={item._id} sx={{ mb: 2, boxShadow: 3 }}>
                     <CardContent>
                       <Grid container spacing={2} alignItems="center">
-                        <Grid item>
+                        <Grid item xs={12} sm={2}>
                           <Checkbox
                             checked={item.selected}
                             onChange={() => handleSelect(item._id)}
+                            color="primary"
                           />
                         </Grid>
-                      
                         <Grid item xs={12} sm={3}>
                           <CardMedia
                             component="img"
                             image={item.imageDataURL}
                             alt="Apparel Design"
-                            sx={{ maxWidth: "100%", height: "auto", objectFit: "contain" }}
+                            sx={{ maxWidth: "100%", height: "auto", objectFit: "contain", borderRadius: 1 }}
                           />
                         </Grid>
-                     
-                        <Grid item xs={12} sm={6}>
-                          <Typography variant="h6">{item.selectedApparel.type}</Typography>
+                        <Grid item xs={12} sm={5}>
+                          <Typography variant="h6" sx={{ fontWeight: 'bold' }}>{item.selectedApparel.type}</Typography>
                           <Typography variant="body2" color="text.secondary">Material: {item.materialName}</Typography>
                           {item.text && (
                             <Typography variant="body2" color="text.secondary">Text: {item.text}</Typography>
@@ -280,66 +252,31 @@ const AddToCart = () => {
                           <Box sx={{ mt: 1 }}>
                             <Grid container spacing={1}>
                               <Grid item xs={6}>
-                                <Typography variant="body2">Material: ${materialPrice}</Typography>
-                                <Typography variant="body2">Color: ${item.colorPrice}</Typography>
+                                <Typography variant="body2">Material: ${materialPrice.toFixed(2)}</Typography>
+                                <Typography variant="body2">Color: ${item.colorPrice.toFixed(2)}</Typography>
                               </Grid>
                               <Grid item xs={6}>
-                                {item.imageDataURL && <Typography variant="body2">Image: ${item.imagePrice}</Typography>}
-                                {item.text && <Typography variant="body2">Text: ${item.textPrice}</Typography>}
+                                {item.imageDataURL && <Typography variant="body2">Image: ${item.imagePrice.toFixed(2)}</Typography>}
                               </Grid>
                             </Grid>
+                            <Divider sx={{ my: 1 }} />
+                            <Typography variant="h6">Total Price: ${item.totalPrice.toFixed(2)}</Typography>
                           </Box>
                         </Grid>
-                     
-                        <Grid item xs={12} sm={3} container direction="column" spacing={1}>
+                        <Grid item xs={12} sm={2} container spacing={1} direction="column" alignItems="flex-end">
                           <Grid item>
-                            <Tooltip title="Increase Quantity">
-                              <IconButton
-                                size="small"
-                                onClick={() => handleQuantityChange(item._id, item.quantity + 1)}
-                              >
-                                <Add />
-                              </IconButton>
-                            </Tooltip>
                             <TextField
                               type="number"
-                              size="small"
                               value={item.quantity}
                               onChange={(e) => handleQuantityChange(item._id, parseInt(e.target.value))}
                               inputProps={{ min: 1 }}
+                              size="small"
+                              sx={{ width: '100px' }}
                             />
-                            <Tooltip title="Decrease Quantity">
-                              <IconButton
-                                size="small"
-                                onClick={() => item.quantity > 1 && handleQuantityChange(item._id, item.quantity - 1)}
-                              >
-                                <Remove />
-                              </IconButton>
-                            </Tooltip>
-                          </Grid>
-                        
-                          <Grid item>
-                            <Typography variant="h6">
-                              Total: ${(item.totalPrice * item.quantity).toFixed(2)}
-                            </Typography>
                           </Grid>
                           <Grid item>
-                            <Button
-                              variant="outlined"
-                              color="primary"
-                              onClick={() => handleVote(item.imageDataURL)}
-                            >
-                              Vote for Design
-                              <ThumbUp sx={{ ml: 1 }} />
-                            </Button>
-                          </Grid>
-                          <Grid item>
-                            <Tooltip title="Remove Item">
-                              <IconButton
-                                size="small"
-                                color="secondary"
-                                onClick={() => handleRemove(item._id)}
-                              >
+                            <Tooltip title="Remove item">
+                              <IconButton color="error" onClick={() => handleRemove(item._id)}>
                                 <Delete />
                               </IconButton>
                             </Tooltip>
@@ -351,32 +288,42 @@ const AddToCart = () => {
                 );
               })}
             </List>
-            <Divider sx={{ my: 2 }} />
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Box sx={{ mt: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <Button
                 variant="contained"
                 color="primary"
-                onClick={handleCheckout}
-                disabled={isProcessing}
-              >
-                {isProcessing ? 'Processing...' : 'Checkout'}
-              </Button>
-              <Button
-                variant="outlined"
-                color="secondary"
                 onClick={() => navigate('/')}
               >
                 Continue Shopping
               </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleCheckout}
+                disabled={isProcessing}
+              >
+                {isProcessing ? <CircularProgress size={24} /> : "Checkout"}
+              </Button>
             </Box>
           </Box>
         )}
+        {formData && (
+          <form id="payment-form" action="https://sandbox.payhere.lk/pay/checkout" method="POST" style={{ display: 'none' }}>
+            {Object.entries(formData).map(([key, value]) => (
+              <input key={key} type="hidden" name={key} value={value} />
+            ))}
+          </form>
+        )}
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={6000}
+          onClose={handleSnackbarClose}
+        >
+          <Alert onClose={handleSnackbarClose} severity="warning" sx={{ width: '100%' }}>
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
       </Box>
-      <form id="payment-form" action="https://sandbox.payhere.lk/pay/checkout" method="POST" style={{ display: 'none' }}>
-        {Object.entries(formData).map(([key, value]) => (
-          <input type="hidden" name={key} value={value} key={key} />
-        ))}
-      </form>
     </Container>
   );
 };
