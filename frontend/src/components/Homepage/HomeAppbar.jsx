@@ -178,7 +178,7 @@ function ResponsiveAppBar() {
                 </MenuItem>
                 <MenuItem onClick={handleCloseUserMenu}>
                   <Link
-                    to="/projects"
+                    to="/myproject"
                     style={{
                       textDecoration: "none",
                       color: "inherit",
@@ -191,7 +191,7 @@ function ResponsiveAppBar() {
                 </MenuItem>
                 <MenuItem onClick={handleCloseUserMenu}>
                   <Link
-                    to="cart"
+                    to="/cart"
                     style={{
                       textDecoration: "none",
                       color: "inherit",

@@ -16,7 +16,7 @@ import TextField from "@mui/material/TextField";
 import AdbIcon from "@mui/icons-material/Adb";
 import { Link } from "react-router-dom";
 
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const settings = ["Profile",  "Logout"];
 
 function DesignNavBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);

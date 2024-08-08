@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Box, Typography, Button, Container, Grid } from "@mui/material";
 import { styled } from "@mui/system";
 import { motion } from "framer-motion";
-
+import { Link } from "react-router-dom";
 const HeroContainer = styled(Box)(({ theme }) => ({
   backgroundImage: `url('https://cdns.crestline.com/crestline/How-to-pick-the-best-tshirt-variety.jpg')`,
   backgroundSize: "cover",
@@ -52,6 +52,7 @@ const CtaButton = styled(Button)(({ theme }) => ({
   padding: theme.spacing(1.5, 4),
   fontSize: "1.2rem",
   fontWeight: "bold",
+ 
 }));
 
 const FeatureBox = styled(Box)(({ theme }) => ({
@@ -91,7 +92,8 @@ export default function ProductHero() {
                 variant="contained"
                 color="primary"
                 size="large"
-                component={motion.button}
+                 to='/myproject'
+                component={Link}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
