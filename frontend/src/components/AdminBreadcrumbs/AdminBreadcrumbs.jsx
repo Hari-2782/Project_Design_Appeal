@@ -24,7 +24,7 @@ function AdminBreadcrumbs() {
         aria-label="breadcrumb"
       >
         <Link
-          to="/AdminCards"
+          to="/admin/AdminCards"
           style={{
             display: "flex",
             alignItems: "center",

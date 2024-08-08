@@ -37,7 +37,7 @@ const ordersData = [
 const gaugeSettings = {
   width: 200,
   height: 200,
-  value: 60,
+  value: 12,
 };
 
 function AdminCharts() {
