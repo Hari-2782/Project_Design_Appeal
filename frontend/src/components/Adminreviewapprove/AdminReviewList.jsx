@@ -1,6 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Box, Typography, Paper, Button } from '@mui/material';
+import { Box, Typography, Paper, Divider, Button, styled } from '@mui/material';
+
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(3),
+  marginBottom: theme.spacing(3),
+  backgroundColor: theme.palette.background.default,
+  boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)',
+  transition: 'transform 0.3s ease-in-out',
+  '&:hover': {
+    transform: 'translateY(-5px)',
+    boxShadow: '0px 6px 25px rgba(0, 0, 0, 0.2)',
+  },
+}));
+
+const ReviewInfoTypography = styled(Typography)(({ theme }) => ({
+  color: theme.palette.text.primary,
+  marginBottom: theme.spacing(1),
+}));
 
 const AdminReviewList = () => {
   const [reviews, setReviews] = useState([]);
@@ -41,23 +58,35 @@ const AdminReviewList = () => {
   };
 
   return (
-    <Box>
-      <Typography variant="h4" component="h1" gutterBottom>
+    <Box sx={{ padding: 4 }}>
+      <Typography variant="h4" component="h1" gutterBottom color="primary">
         Pending Reviews
       </Typography>
+      <Divider sx={{ marginBottom: 3 }} />
       {error && <Typography color="error">{error}</Typography>}
       {reviews.map(review => (
-        <Paper key={review._id} sx={{ p: 2, mb: 2 }}>
-          <Typography variant="h6">{review.userName}</Typography>
-          <Typography variant="body1">{review.review}</Typography>
-          <Typography variant="body2">Rating: {review.rating}</Typography>
-          <Button variant="contained" color="primary" onClick={() => handleApprove(review._id)}>
-            Approve
-          </Button>
-          <Button variant="contained" color="secondary" onClick={() => handleReject(review._id)}>
-            Reject
-          </Button>
-        </Paper>
+        <StyledPaper key={review._id}>
+          <ReviewInfoTypography variant="h6">{review.userName}</ReviewInfoTypography>
+          <ReviewInfoTypography variant="body1">{review.review}</ReviewInfoTypography>
+          <ReviewInfoTypography variant="body2">Rating: {review.rating}</ReviewInfoTypography>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 2 }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleApprove(review._id)}
+              sx={{ marginRight: 1 }}
+            >
+              Approve
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => handleReject(review._id)}
+            >
+              Reject
+            </Button>
+          </Box>
+        </StyledPaper>
       ))}
     </Box>
   );
