@@ -37,4 +37,10 @@ For any inquiries or issues, please reach out to Harisanth at hmsanth@gmail.com.
 
 # License
 This project is licensed under the MIT License. See the LICENSE file for details.
+# Screenshots
+![Screenshot 2024-08-15 095337](https://github.com/user-attachments/assets/b7667e0c-d240-4f10-9913-c8f28415fdb2)
+![Screenshot 2024-08-15 095416](https://github.com/user-attachments/assets/862568fe-bd47-4625-b1e6-902ca39a207b)
+![Screenshot 2024-08-15 095436](https://github.com/user-attachments/assets/0a8ecfb0-1c2a-4c5e-a68e-6dd0a75ea5ba)
+![Screenshot 2024-08-15 095503](https://github.com/user-attachments/assets/c4836e15-74cb-41d0-99d4-ca403d25c555)
+![Screenshot 2024-08-15 095607](https://github.com/user-attachments/assets/21a44a7e-97ac-4309-b007-1bba11a6712b)
 
